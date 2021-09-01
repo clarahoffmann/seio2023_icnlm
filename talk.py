@@ -46,7 +46,6 @@ class Title(SlideScene):
         set_background(self, None, True)
         title1 = Tex(r"\fontfamily{lmss}\selectfont \textbf{Marginally Calibrated Predictive Distributions} ").move_to(1*UP).scale(1.2).set_color(BLUE_E)
         title2 = Tex(r"\fontfamily{lmss}\selectfont \textbf{for End-to-End Learners in Autonomous Driving}").move_to(.4*UP).scale(1.2).set_color(BLUE_E)
-        #title3 = Tex("in Autonomous Driving", font="Noto Sans").move_to(.4*UP).scale(0.8).set_color(BLUE_E)
 
         authors = Tex(r"\fontfamily{lmss}\selectfont Clara Hoffmann and Nadja Klein").scale(0.8).set_color(BLACK).move_to(DOWN)
         group = Tex(r"\fontfamily{lmss}\selectfont Emmy Noether Research Group in Statistics \& Data Science, Humboldt-Universität zu Berlin").scale(0.5).set_color(BLACK).move_to(1.5*DOWN)
@@ -63,7 +62,18 @@ class EtELearning(SlideScene):
         ete_diag = ImageMobject('files/ete_diagram/ete.png').move_to(.25*DOWN)
         ete_diag.width = 6
         ete_diag.height = 4
+        rectangle_old = Rectangle(height=2, width=2.75, fill_opacity = 0, color = RED).move_to(.5*UP + .3*RIGHT)
+        rectangle_old2 = Rectangle(height=1.5, width=1.75, fill_opacity = 0, color = RED).move_to(0.25*UP + 2.4*RIGHT)
+        rectangle_new = Rectangle(height=1.5, width=1.5, fill_opacity = 0, color = RED).move_to(1.5*DOWN + 0.17*LEFT)
+
         self.add(frame_title, ete_diag)
+        self.slide_break()
+        self.play(Create(rectangle_old))
+        self.slide_break()
+        self.play(ReplacementTransform(rectangle_old, rectangle_old2))
+        self.slide_break()
+        self.remove(rectangle_old2)
+        self.play(Create(rectangle_new))
         self.wait(0.5)
 
 class Motivation(SlideScene):
@@ -83,20 +93,21 @@ class Motivation(SlideScene):
         
         solution = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Solution}: Implicit-copula neural linear model of Klein, Nott, Smith 2020 """).set_color(BLACK).scale(.7).align_to(title, LEFT).move_to(2*DOWN)
         solution.bg = SurroundingRectangle(solution, color=GREEN_D, fill_color=GREEN_A, fill_opacity=.2)
-
+        
+        solutions = VGroup(solution, solution.bg)
         frame_title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Problems in Uncertainty Quantification for EtE Learning} """).move_to(2*UP).set_color(BLACK).scale(0.7)
 
-        self.add(frame_title)
+        self.add(frame_title, title)
         self.slide_break()
-        self.add(title, problems1)
+        self.play(Create(problems1))
         self.slide_break()
-        self.add(problems2)
+        self.play(Create(problems2))
         self.slide_break()
-        self.add(problems3)
+        self.play(Create(problems3))
         self.slide_break()
-        self.add(problems4)
+        self.play(Create(problems4))
         self.slide_break()
-        self.add(solution, solution.bg)
+        self.play(Create(solutions))
         self.wait(0.5)
 
 class Notation(SlideScene):
@@ -120,50 +131,47 @@ class CopulaSlide(SlideScene):
 
     title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Implicit Copula Neural Linear Model (IC-NLM)} """).move_to(2*UP).set_color(BLACK).scale(0.9)
 
-    nlm_text = Tex(r"\fontfamily{lmss}\selectfont pseudo regression: ").set_color(BLACK).scale(0.9)
-    nlm1 = Tex(r"$\Tilde{Z} = $").set_color(BLACK) #.move_to(RIGHT)
+    nlm_text = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \item pseudo regression: \end{itemize}").set_color(BLACK).scale(0.9)
+    nlm1 = Tex(r"$\Tilde{Z} = $").set_color(BLACK).scale(0.9) #.move_to(RIGHT)
     nlm2 = Tex(r"$B_{\boldsymbol{\zeta}}(\boldsymbol{x})\boldsymbol{\beta}$").set_color(BLACK).scale(0.9)
-    nlm3 = Tex(r"$ + \boldsymbol{\varepsilon}$").set_color(BLACK).scale(0.79)
-    nlm = VGroup(VGroup(nlm_text, nlm1).arrange(RIGHT, buff=MED_SMALL_BUFF), nlm2, nlm3).arrange(RIGHT, buff=SMALL_BUFF).move_to(np.array([-4, 1, 0])).scale(0.7)
+    nlm3 = Tex(r"$ + \boldsymbol{\varepsilon}$").set_color(BLACK).scale(0.9)
+    nlm = VGroup(VGroup(nlm_text, nlm1).arrange(RIGHT, buff=MED_SMALL_BUFF), nlm2, nlm3).arrange(RIGHT, buff=SMALL_BUFF).move_to(np.array([-1.5, 1, 0])).scale(0.7)
 
     nlm_text_dbf_text = Tex(r"\fontfamily{lmss}\selectfont deep basis functions").move_to(nlm2.get_bottom() + DOWN).set_color(BLACK).scale(0.6)
     nlm_text_dbf_line =  Line(nlm2.get_bottom(), nlm_text_dbf_text.get_top(), stroke_width = 1).set_color(BLACK)
     nlm_text_dbf = VGroup(nlm_text_dbf_text, nlm_text_dbf_line)
     
     nlm_text_error_text = Tex(r"\fontfamily{lmss}\selectfont artificial error term").move_to(nlm3.get_bottom()+ 2*DOWN + 0.5*RIGHT).set_color(BLACK).scale(0.6)
-    nlm_text_error_line =  Line(nlm3.get_bottom() + .5*RIGHT,nlm_text_error_text.get_top(), stroke_width = 0.5).set_color(BLACK)
+    nlm_text_error_line =  Line(nlm3.get_bottom() + 0.05*RIGHT ,nlm_text_error_text.get_top(), stroke_width = 0.5).set_color(BLACK)
     nlm_text_error = VGroup(nlm_text_error_text, nlm_text_error_line)
 
-    #nlm2 = nlm.copy().move_to(np.array([-1.5, 2, 0])).scale(0.7)
 
-
-    errors = Tex(r"$\varepsilon_i \sim N(0, \sigma^2)$").set_color(BLACK)
-    errors2 = errors.copy().move_to(nlm2.get_right()+ 1.5*RIGHT).scale(0.7)
-    errors2_text_text = Text(r"\fontfamily{lmss}\selectfont i.i.d.").move_to(errors.get_bottom()+ DOWN).set_color(BLACK).scale(0.6)
+    errors = Tex(r"$\varepsilon_i \sim N(0, \sigma^2)$").set_color(BLACK).move_to(nlm.get_right()+ 1.5*RIGHT).scale(0.9).scale(0.7)
+    errors2_text_text = Tex(r"\fontfamily{lmss}\selectfont i.i.d.").move_to(errors.get_bottom()+ DOWN).set_color(BLACK).scale(0.6)
     errors2_line =  Line(errors.get_bottom(),errors2_text_text.get_top(), stroke_width = 0.5).set_color(BLACK)
     errors2_text = VGroup(errors2_text_text, errors2_line)
 
 
-    beta_text = Text(r"\fontfamily{lmss}\selectfont shrinkage prior: ").move_to(RIGHT).scale(0.7)
-    beta1 = Tex(r" \quad $\boldsymbol{\beta} | \boldsymbol{\theta}, \sigma^2 \sim N(0, \sigma^2$").set_color(BLACK)
-    beta12 = Tex(r"$P(\boldsymbol{\theta})^{-1})$").set_color(BLACK)
-    beta = VGroup(VGroup(beta_text, beta1).arrange(RIGHT, buff=MED_SMALL_BUFF), beta12).arrange(RIGHT, buff=SMALL_BUFF)
-    beta2 = beta.copy().move_to(np.array([0, 1, 0])).scale(0.7)
-    beta1_text_text = Text(r"\fontfamily{lmss}\selectfont shrinkage parameters").move_to(beta12.get_bottom() + DOWN).set_color(BLACK).scale(0.6)
+    beta_text = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \item  shrinkage prior: \end{itemize} ").move_to(RIGHT).set_color(BLACK).move_to(errors.get_bottom() + .5*DOWN).scale(0.9)
+    beta1 = Tex(r" \quad $\boldsymbol{\beta} | \boldsymbol{\theta}, \sigma^2 \sim N(0, \sigma^2$").set_color(BLACK).scale(0.9)
+    beta12 = Tex(r"$P(\boldsymbol{\theta})^{-1})$").set_color(BLACK).scale(0.9)
+    beta = VGroup(VGroup(beta_text, beta1).arrange(RIGHT, buff=MED_SMALL_BUFF), beta12).arrange(RIGHT, buff=SMALL_BUFF).scale(0.7).move_to(nlm.get_bottom() + 1*DOWN).align_to(nlm, LEFT)
+
+    beta1_text_text = Tex(r"\fontfamily{lmss}\selectfont shrinkage parameters").move_to(beta12.get_bottom() + DOWN).set_color(BLACK).scale(0.6)
     beta1_line =  Line(beta12.get_bottom(), beta1_text_text.get_top(), stroke_width = 1).set_color(BLACK)
     beta_text = VGroup(beta1_text_text, beta1_line)
 
-    #z_post = Tex(r"$\Tilde{Z} | \boldsymbol{x}, \sigma^2, \boldsymbol{\theta} \sim N(0, \sigma^2 \Sigma$").set_color(BLACK)
-    z = Tex(r"$ Z = \sigma^{-1}S(\boldsymbol{x}, \boldsymbol{\theta}) \Tilde{Z} | \boldsymbol{x}, \sigma^2 \sim N(0, R(\boldsymbol{x}, \boldsymbol{\theta}))$").set_color(BLACK).move_to(np.array([-1, -1, 0]))
-    #all_z = VGroup(z_post, z).arrange(RIGHT)
-    z_text_text = VGroup(Tex(r"$\boldsymbol{\beta}$"), Text(r"\fontfamily{lmss}\selectfont integrated out").scale(0.7)).arrange(RIGHT).move_to(z.get_bottom() + DOWN).set_color(BLACK).scale(0.8)
+    z_text = Tex(r" \fontfamily{lmss}\selectfont \begin{itemize} \item standardized distribution \end{itemize}").set_color(BLACK).move_to(beta.get_bottom() + .5*DOWN).scale(0.9)
+    z_tex = Tex(r"$ Z = \sigma^{-1}S(\boldsymbol{x}, \boldsymbol{\theta}) \Tilde{Z} | \boldsymbol{x}, \sigma^2 \sim N(0, R(\boldsymbol{x}, \boldsymbol{\theta}))$").set_color(BLACK).scale(0.9)
+    z = VGroup(z_text, z_tex).arrange(RIGHT, buff=SMALL_BUFF).scale(0.7).move_to(beta.get_bottom() + 1*DOWN).align_to(nlm, LEFT)
+
+    z_text_text = VGroup(Tex(r"$\boldsymbol{\beta}$"), Tex(r"\fontfamily{lmss}\selectfont integrated out")).arrange(RIGHT).move_to(z.get_bottom() + DOWN).set_color(BLACK).scale(0.6)
     z_text_line =  Line(z.get_bottom(), z_text_text.get_top(), stroke_width = 1).set_color(BLACK)
     z_text = VGroup(z_text_text, z_text_line)
 
-    z_text_text2 = VGroup(Tex(r"\fontfamily{lmss}\selectfont margins").scale(0.7), Tex(r"$\sim N(0,1)$")).arrange(RIGHT).move_to(z.get_bottom() + DOWN + 4*RIGHT).set_color(BLACK).scale(0.8)
+    z_text_text2 = VGroup(Tex(r"\fontfamily{lmss}\selectfont margins"), Tex(r"$\sim N(0,1)$")).arrange(RIGHT).move_to(z.get_bottom() + DOWN + 4*RIGHT).set_color(BLACK).scale(0.6)
     z_text_line2 =  Line(z.get_bottom() + 4*RIGHT, z_text_text2.get_top(), stroke_width = 1).set_color(BLACK)
     z_text2 = VGroup(z_text_text2, z_text_line2)
-    all_z2 = z.copy().move_to(np.array([0, 0, 0])).scale(0.7)
 
 
     rectangle = Rectangle(height=2, width=3)
@@ -193,7 +201,7 @@ class CopulaSlide(SlideScene):
                    r"$\phi_{1}(z_i| \boldsymbol{x}_i, \boldsymbol{\theta})$"
                       ).move_to(sklars.get_bottom() + n*DOWN).set_color(BLACK).scale(0.8) 
     sklar_eq2.set_color_by_tex_to_color_map({
-        r"$\phi_n(\boldsymbol{z}; \boldsymbol{0}, R(\boldsymbol{x}, \boldsymbol{\theta})$": RED_E,
+        r"$\phi_n(\boldsymbol{z}; \boldsymbol{0}, R(\boldsymbol{x}, \boldsymbol{\theta}))$": RED_E,
         r"$\phi_{1}(z_i| \boldsymbol{x}_i, \boldsymbol{\theta})$": RED_E
              })   
     
@@ -229,10 +237,11 @@ class CopulaSlide(SlideScene):
     final_expr.set_color_by_tex_to_color_map({
         r"$p(\boldsymbol{\beta}, \boldsymbol{\theta}| \boldsymbol{x}, \boldsymbol{y})$": RED_E
              })
-    final_exp_text_text = Tex(r"known up to normalizing constant", font="Noto Sans").move_to(final_expr.get_bottom() + DOWN ).set_color(BLACK).scale(0.8)
-    final_exp_text_line =  Line(final_expr.get_bottom(), final_exp_text_text.get_top(), stroke_width = 1).set_color(BLACK)
+    final_exp_text_text = Tex(r"\fontfamily{lmss}\selectfont known up to normalizing constant").move_to(final_expr.get_bottom() + DOWN + RIGHT ).set_color(BLACK).scale(0.8)
+    final_exp_text_line =  Line(final_expr.get_bottom() + RIGHT, final_exp_text_text.get_top(), stroke_width = 1).set_color(BLACK)
     final_exp_text = VGroup(final_exp_text_text, final_exp_text_line)
     
+
     # the posterior of the model parameters is only known up to a normalizing constant so it has to be approximated.
     # in former work, the posterior was estimated in MCMC
     # However, this is not possible in EtE learning, where we have immense data sets
@@ -243,82 +252,68 @@ class CopulaSlide(SlideScene):
     # REGRESSION MODEL
     
     self.add(title, nlm)
-    self.slide_break() #self.wait()
-    self.add(nlm_text_dbf)
-    self.slide_break() #self.wait()
-    self.add(nlm_text_error)
-    self.slide_break() #self.wait()
+    self.slide_break() 
+    self.play(Create(nlm_text_dbf))
+    self.slide_break() 
+    self.play(Create(nlm_text_error))
+    self.slide_break() 
     self.remove(nlm_text_dbf, nlm_text_error)
-    self.play(ReplacementTransform(nlm, nlm2))
-    self.slide_break() #self.wait()
+    #self.play(ReplacementTransform(nlm, nlm2))
+    self.slide_break() 
 
     # ERROR TERM
-    self.add(errors)
-    self.slide_break() #self.wait()
-    self.add(errors2_text)
-    self.slide_break() #self.wait()
+    self.play(Create(errors))
+    self.slide_break() 
+    self.play(Create(errors2_text))
+    self.slide_break() 
     self.remove(errors2_text)
-    self.slide_break() #self.wait()
-    self.play(ReplacementTransform(errors, errors2))
-    self.slide_break()
+    self.slide_break() 
+    
 
     # BETA
-    self.add(beta)
-    self.slide_break() #self.wait()
-    self.add(beta_text)
-    self.slide_break() #self.wait()
-    self.remove(beta_text)
-    self.play(ReplacementTransform(beta, beta2))
+    self.play(Create(beta))
+    self.slide_break() 
+    self.play(Create(beta_text))
     self.slide_break()
+    self.remove(beta_text)
+    self.slide_break()
+    #self.play(ReplacementTransform(beta, beta2))
+    #self.slide_break()
 
     # beta integrated out
-    self.add(z)
-    self.slide_break() #self.wait()
-    self.add(z_text)
-    self.slide_break() #self.wait()
-    self.add(z_text2)
-    self.slide_break() #self.wait()
+    self.play(Create(z))
+    self.slide_break()
+    self.play(Create(z_text))
+    self.slide_break() 
+    self.play(Create(z_text2))
+    self.slide_break() 
     self.remove(z_text, z_text2)
-    self.play(ReplacementTransform(z, all_z2))
-    self.slide_break() #self.wait()
+    #self.play(ReplacementTransform(z, all_z2))
+    self.slide_break() 
 
-    self.remove(nlm2, errors2, beta2, all_z2, z_text2, title)
-    self.slide_break() #self.wait()
+    self.remove(nlm, errors, beta,  z, z_text2, title) #beta2,
+    self.slide_break() 
 
     # SKLARS THEOREM
     self.add(sklars, sklar_eq)
-    self.slide_break() #self.wait()
+    self.slide_break() 
     
     self.play(ReplacementTransform(sklar_eq, sklar_eq_col))
-    self.slide_break() #self.wait(2)
+    self.slide_break() 
     self.play(ReplacementTransform(sklar_eq_col, sklar_eq2))
-    self.slide_break() #self.wait(2)
+    self.slide_break() 
     self.play(ReplacementTransform(sklar_eq2, copula_dens))
-    self.slide_break() #self.wait(2)
+    self.slide_break() 
     self.add(copula_dens_y)
-    self.slide_break() #self.wait(2)
+    self.slide_break() 
 
     self.remove(copula_dens, copula_dens_y, sklars)
     self.play(ReplacementTransform(copula_dens_y, final_expr))
     self.add(final_exp_title)
-    self.slide_break() #self.wait()
+    self.slide_break() 
     self.add(final_exp_text)
-    self.slide_break() #self.wait(2)
+    self.slide_break() 
 
-
-    #self.wait()
-    #self.play(ReplacementTransform(nlm, nlm2))
-    #self.wait()
-
-    #self.add(errors)
-    #self.wait()
-    #self.play(ReplacementTransform(errors, errors2))
-    #self.wait()
-
-    #self.add(beta)
-    #self.wait()
-    #self.play(ReplacementTransform(beta, beta2))
-    #self.wait()
 
 
 
@@ -355,13 +350,13 @@ class VISlide(SlideScene):
     var_density = Tex(r"""$q_{\boldsymbol{\lambda}}(\boldsymbol{\beta}, \boldsymbol{\theta})$""").set_color(RED_E)
     member = VGroup(Text("approximation family:", font="Noto Sans").set_color(BLACK).scale(0.5),
                     Tex(r"""$q_{\boldsymbol{\lambda}}(\boldsymbol{\beta}, \boldsymbol{\theta}) = 
-    N(\boldsymbol{\mu}, \boldsymbol{\Upsilon} \boldsymbol{\Upsilon}^T + \Delta^2)$""").set_color(BLACK)).arrange(DOWN).move_to(2*RIGHT).scale(0.8)
+    N(\boldsymbol{\mu}, \boldsymbol{\Upsilon} \boldsymbol{\Upsilon}^T + \Delta^2)$""").set_color(BLACK)).arrange(DOWN).move_to(2*RIGHT +2.5*UP ).scale(0.8)
 
 
     KLD = VGroup(Text("Kullback-Leibler divergence:", font="Noto Sans").set_color(BLACK).scale(0.5),
                  Tex(r"""$\mathrm{KLD} (q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta}) || p(\boldsymbol{\vartheta}| \boldsymbol{y})) = 
     \int \frac{q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})}{p(\boldsymbol{\vartheta} | \boldsymbol{y})}
-    q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})d(\boldsymbol{\vartheta})$""").set_color(BLACK)).arrange(DOWN).move_to(2*RIGHT).scale(0.8)
+    q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})d(\boldsymbol{\vartheta})$""").set_color(BLACK)).arrange(DOWN).move_to(1*UP + 2*RIGHT ).scale(0.8)
 
     vlb = VGroup(Text("variational lower bound:", font="Noto Sans").set_color(BLACK).scale(0.5),
                  Tex(r"""$\mathcal{L}(\boldsymbol{\lambda}) = 
@@ -369,14 +364,12 @@ class VISlide(SlideScene):
     \log q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})] $""").set_color(BLACK)).arrange(DOWN).move_to(1*UP + 2*RIGHT ).scale(0.8)
     
     delta_vlb = VGroup(Text("optimize via gradient:", font="Noto Sans").set_color(BLACK).scale(0.5),
-                       Tex(r"$\nabla_{\boldsymbol{\lambda}}\mathcal{L}(\boldsymbol{\lambda})$").set_color(BLACK)).arrange(DOWN).move_to(2*RIGHT).scale(0.8)
+                       Tex(r"$\nabla_{\boldsymbol{\lambda}}\mathcal{L}(\boldsymbol{\lambda})$").set_color(BLACK)).arrange(DOWN).move_to(2*RIGHT + 1*DOWN).scale(0.8)
     
     delta_vlb_update =  VGroup(Text("update rule:", font="Noto Sans").set_color(BLACK).scale(0.5),
                                Tex(r"""$ \boldsymbol{\lambda}^{(t+1)} = 
     \boldsymbol{\lambda}^{(t)} + \rho 
-    \nabla_{\boldsymbol{\lambda}}\mathcal{L}(\boldsymbol{\lambda}^{(t)})$""").set_color(BLACK)).arrange(DOWN).move_to(2*RIGHT).scale(0.8)
-
-    #self.add(var_density)
+    \nabla_{\boldsymbol{\lambda}}\mathcal{L}(\boldsymbol{\lambda}^{(t)})$""").set_color(BLACK)).arrange(DOWN).move_to(2*RIGHT +2*DOWN).scale(0.8)
 
 
     axes = Axes((0, 3), (0, 5)).scale(0.4).move_to(RIGHT)
@@ -461,49 +454,40 @@ class VISlide(SlideScene):
     f_always(number.set_value, p.get_value)
     always(label.next_to, axes, DOWN)
 
-    #area1 =  axes.get_area(target_graph, x_range=[0,3], color=BLUE, opacity = 0.2)
-    #area2 =  axes.get_area(v_approx, x_range=[0,3], color=RED, opacity = 0.2)
-
-    #area2.add_updater(lambda m: m.become(
-    #    axes.get_area(v_approx, x_range=[0,3], color=RED, opacity = 0.2)))
-
-    #target_label = axes.get_graph_label(target_graph, "p(\\boldsymbol{\\vartheta}| \\boldsymbol{x}, \\boldsymbol{y})").move_to(0.1*LEFT + UP).scale(0.5)
+    #target_label = axes.get_graph_label(target_graph, Tex(r"p(\\boldsymbol{\\vartheta}| \\boldsymbol{x}, \\boldsymbol{y})")).move_to(0.1*LEFT + UP).scale(0.5)
+    target_label = Tex(r"$p(\boldsymbol{\vartheta}| \boldsymbol{x}, \boldsymbol{y})$").set_color(BLUE).scale(0.5)
+    v_approx_label = Tex(r"$q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})$").set_color(RED_E).scale(0.5)
+    always(v_approx_label.next_to, target_graph, .5*RIGHT)
+    always(target_label.next_to, target_graph, UP)
     #v_approx_label = axes.get_graph_label(v_approx, r"q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})").move_to(2*RIGHT + UP).scale(0.5)
 
     final_graph = VGroup(axes, target_graph,  v_approx2) #target_label, v_approx_label,
-    self.add(axes) #, area1
+    self.add(axes) 
     self.play(
             Create(target_graph),
-            #Create(area2),
-            #Create(target_label),
+            Create(target_label),
         )
     self.slide_break()
     #self.wait(2)
     self.play(Create(v_approx),
-             #Create(v_approx_label),
+              Create(v_approx_label),
               Create(label))
     self.slide_break()
     
     self.play(p.animate.set_value(4), run_time=3)
     self.slide_break()
-    #self.wait(2)
     self.remove(axes, target_graph, v_approx, label)
     self.play(final_graph.animate.move_to(4*LEFT))
     self.slide_break()
-    #self.wait(2)
     self.add(member)
-    self.slide_break() #self.wait()
-    self.play(member.animate.move_to(2.5*UP + 2*RIGHT ))
-    self.slide_break() # self.wait()
+    self.slide_break() 
     self.add(KLD)
-    self.slide_break() #self.wait()
-    self.play(KLD.animate.move_to(1*UP + 2*RIGHT ))
-    self.slide_break() #self.wait()
+    self.slide_break() 
     self.play(ReplacementTransform(KLD, vlb))
-    self.slide_break() #self.wait()
-    self.add(delta_vlb.move_to(.5*DOWN + 2*RIGHT))
-    self.slide_break() #self.wait()
-    self.add(delta_vlb_update.move_to(2*DOWN + 2*RIGHT))
+    self.slide_break() 
+    self.add(delta_vlb)
+    self.slide_break() 
+    self.add(delta_vlb_update)
     self.wait()
 
 class Data(SlideScene):
@@ -530,9 +514,9 @@ class PostMeanSD(SlideScene):
 
         hs_plots = Group(hs_means,hs_sd).arrange() #.move_to(np.array([5, -3.5, 0]))
         
-        title = Tex(r"\fontfamily{lmss}\selectfontAccuracy VI vs. HMC").move_to(hs_plots.get_top() + .5*UP).set_color(BLACK).scale(0.5)
+        title = Tex(r"\fontfamily{lmss}\selectfont Accuracy VI vs. HMC").move_to(hs_plots.get_top() + .5*UP).set_color(BLACK).scale(0.5)
         
-        conclusion = Text("The IC-NLM is better calibrated than MC-Dropout and the Mixture Density Network", font="Noto Sans").set_color(BLACK).move_to(hs_plots.get_bottom() + .75*DOWN).scale(0.5)
+        conclusion = Text("The means are estimated accuractely but some misestimation for the s.d.", font="Noto Sans").set_color(BLACK).move_to(hs_plots.get_bottom() + .75*DOWN).scale(0.5)
         conclusion.bg = SurroundingRectangle(conclusion, color=RED, fill_color=RED_A, fill_opacity=.2)
 
         self.add(title, hs_plots)
@@ -598,15 +582,15 @@ class PredictionIntervals(SlideScene):
 
 class OutlookDiscussion(SlideScene):
     def construct(self):
-        set_background(self, "Outlook \& Discussion", True)
+        set_background(self, "Outlook & Discussion", True)
         title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Outlook and Discussion}").move_to(2*UP).set_color(BLACK).scale(0.7)
-        placeholder = Tex(r"""\begin{itemize}
+        bullet_points = Tex(r"""\begin{itemize}
         \item Regularized horseshoe prior
         \item Combine densities with route planning
         \item Identify several steering actions
         \item Integrate VI into training
         \item Loss of information of neural linear models vs. full model uncertainty
         \end{itemize}
-        """).set_color(BLACK)
-        self.add(placeholder)
+        """).set_color(BLACK).scale(0.5)
+        self.add(title, bullet_points)
         self.wait(0.5)
