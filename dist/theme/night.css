@@ -16,7 +16,7 @@ section.has-light-background, section.has-light-background h1, section.has-light
   --r-background-color: #111;
   --r-main-font: Open Sans, sans-serif;
   --r-main-font-size: 40px;
-  --r-main-color: #eee;
+  --r-main-color: #2b2b2b;
   --r-block-margin: 20px;
   --r-heading-margin: 0 0 20px 0;
   --r-heading-font: Montserrat, Impact, sans-serif;
@@ -36,7 +36,7 @@ section.has-light-background, section.has-light-background h1, section.has-light
   --r-link-color-dark: #d08a1d;
   --r-link-color-hover: #f3d7ac;
   --r-selection-background-color: #e7ad52;
-  --r-selection-color: #fff;
+  --r-selection-color: #2b2b2b;
 }
 
 .reveal-viewport {
