@@ -58,7 +58,7 @@ class Title(SlideScene):
 class EtELearning(SlideScene):
     def construct(self):
         set_background(self, "End-to-End Learning", True)
-        frame_title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{End-to-End Learning} """).move_to(2*UP).set_color(BLACK).scale(0.7)
+        frame_title = Tex(r"\fontfamily{lmss}\selectfont \textbf{End-to-End Learning}").move_to(2*UP).set_color(BLACK).scale(0.7)
         ete_diag = ImageMobject('files/ete_diagram/ete.png').move_to(.25*DOWN)
         ete_diag.width = 6
         ete_diag.height = 4
@@ -75,6 +75,215 @@ class EtELearning(SlideScene):
         self.remove(rectangle_old2)
         self.play(Create(rectangle_new))
         self.wait(0.5)
+
+class UncertaintyEtE(SlideScene):
+        
+  def show_function_graph(self):
+    def func(x, degree):
+      #mixture 1
+      rv1 = norm(loc = 1.5, scale = 0.2)
+      rv2 = norm(loc = 0.5, scale = 0.2)
+      rv3 = norm(loc = 0, scale = 0.2)
+      rv4 = norm(loc = 2.2, scale = 0.1)
+      
+      a1 = max([0,5 - degree*2])
+      a2 = degree
+      a3 = degree
+      a4 = 0.5*(degree-1.5)**2
+
+      if x == 0:
+        return 0
+      
+      sum = a1 + a2 + a3 + a4
+      return((a1*rv1.pdf(x)/sum + a2*rv2.pdf(x)/sum + a3*rv3.pdf(x)/sum + a4*rv4.pdf(x)/sum )*2)
+    
+    def func2(x, degree):
+      rv1 = norm(loc = 2, scale = 0.7)
+      rv2 = norm(loc = 2.4, scale = 0.4)
+
+      if x == 0:
+        return 0
+
+      return((.5*rv1.pdf(x) + .5*rv2.pdf(x))*3)
+      
+      
+    p = ValueTracker(0)
+    
+    ax = Axes(
+            (0, 5), (0, 3),
+            x_length=5,
+            y_length=3,
+            axis_config={
+                'color' : BLACK,
+                'stroke_width' : 1.5,
+                'include_numbers' : False,
+                'decimal_number_config' : {
+                    'num_decimal_places' : 0,
+                    'include_sign' : False,
+                    'color' : BLACK
+                }, 
+              },
+            tips = False
+        ).set_color(BLACK).scale(0.8)
+
+    graph = ax.get_graph(
+            lambda x: func(x,  p.get_value()) ,
+            color = BLUE 
+        )
+
+    graph.add_updater(
+            lambda m: m.become(
+                ax.get_graph(
+                    lambda x: func(x,  p.get_value()),
+                    color = BLUE 
+                )
+            )
+        )
+    
+    label_y = Tex(r"\fontfamily{lmss}\selectfont density").set_color(BLACK).scale(0.5)
+    label_x = Tex(r"\fontfamily{lmss}\selectfont steering angle in $^{\circ}$").set_color(BLACK).scale(0.5)
+    always(label_y.next_to, ax, LEFT + UP)
+    always(label_x.next_to, ax, RIGHT + DOWN)
+
+    label_graph = Tex(r"$\hat{p}(y_i | \boldsymbol{x}_i)$").set_color(BLUE).scale(0.8)
+    always(label_graph.next_to, graph, UP)
+    
+    graph_end = ax.get_graph(
+            lambda x: func2(x,  p.get_value()) ,
+            color = BLUE 
+        )
+
+    return(ax, graph, p, label_y, label_x, graph_end, label_graph)
+
+  def construct(self):
+
+    set_background(self, "Introduction", False) 
+    frame_title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Predictive Densities for End-to-End Learning} ").move_to(2*UP).set_color(BLACK).scale(0.7)
+    theta_tracker = ValueTracker(110)
+
+    line1 = Line(start = 2*LEFT, end = 2*RIGHT, path_arc = np.pi)
+    line1.scale(0.9)
+    line1.rotate(np.pi)
+    line1.move_to(DOWN)
+    line1.set_color(BLACK)
+
+    line1b = Line(start = 2*LEFT, end = 2*RIGHT)
+    line1b.scale(0.9)
+    line1b.rotate(np.pi)
+    line1b.move_to(DOWN)
+    line1b.set_color(BLACK)
+
+
+    line2 = DashedLine(start = 2*LEFT, end = 1.5*RIGHT)
+    line2.rotate(np.pi/2)
+    line2.move_to(LEFT)
+    line2.set_color(BLACK)
+
+    line3 = DashedLine(start = 2*LEFT, end = 2*RIGHT)
+    line3.rotate(np.pi/2)
+    line3.move_to(RIGHT)
+    line3.set_color(BLACK)
+
+    line4 = Line(np.array([0,-2,0]), np.array([2,-2,0]))
+    line4.set_color(BLACK)
+    line_ref = line4.copy()
+
+    rotation_center = np.array([0,-2,0])
+    line4.rotate(
+            theta_tracker.get_value() * DEGREES, about_point=rotation_center
+        )
+
+    self.add(line4, line1, line2, line3) # 
+    
+    line4.add_updater(
+            lambda x: x.become(line_ref.copy()).rotate(
+                theta_tracker.get_value() * DEGREES, about_point=rotation_center
+            )
+        )
+    
+
+    roundrect = RoundedRectangle(height = 1, width = 1.75, corner_radius = 0.2)
+    roundrect.rotate(angle = np.pi/2)
+    roundrect.move_to(3*DOWN)
+    roundrect.set_color(BLACK)
+
+    cartop = RoundedRectangle(height = 0.75, width = 0.75, corner_radius = 0.1)
+    cartop.rotate(angle = np.pi/2)
+    cartop.move_to(3*DOWN)
+    cartop.set_color(BLACK)
+
+    windshield =   [(0,0,0),   #P1
+                    (0,1,0),    #P2
+                    (1,0,0),    #P3
+                    (1,1,0),    #P4
+                    ]
+    
+
+    line5 = Line(np.array([-4,-2.50, 0]), np.array([4, -2.50, 0]), stroke_width = 1.2)
+    
+    line5.set_color(BLACK)
+
+    bullet_points = Tex(r"\fontfamily{lmss}\selectfont Use predictive densities $\hat{p}(y_i|\boldsymbol{x}_i$) to:").set_color(BLACK).scale(0.7).move_to(RIGHT + 2*UP)
+    bullet1 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item switch to manual control \end{itemize} \end{itemize}").align_to(bullet_points, LEFT).set_color(BLACK).scale(0.7).move_to(RIGHT + 1.25*UP)
+    bullet2 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item compare of different end-to-end learners  \end{itemize} \end{itemize}").align_to(bullet1, LEFT).set_color(BLACK).scale(0.7).move_to(.5*UP)
+    bullet3 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item identify level of uncertainty   \end{itemize} \end{itemize}").align_to(bullet1, LEFT).scale(0.7).set_color(BLACK).move_to(-.25*UP) #in different regions
+    bullet4 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item identify high-risk predictions  \end{itemize} \end{itemize}").align_to(bullet1, LEFT).set_color(BLACK).scale(0.7).move_to(-1*UP)
+    bullet5 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item identify overconfident learners  \end{itemize} \end{itemize}").align_to(bullet1, LEFT).set_color(BLACK).scale(0.7).move_to(-1.75*UP)
+    bullet6 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item identify predictive variance  \end{itemize} \end{itemize}").align_to(bullet1, LEFT).set_color(BLACK).scale(0.7).move_to(-2*UP)
+    bullet7 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item identify prediction intervals  \end{itemize} \end{itemize}").align_to(bullet1, LEFT).move_to(DOWN).set_color(BLACK).scale(0.7).move_to(-2.25*UP)
+
+
+    
+    self.add(roundrect, cartop, frame_title) #, poly
+    self.slide_break()
+    self.play(theta_tracker.animate.set_value(90))
+    self.play(theta_tracker.animate.set_value(100))
+    self.play(theta_tracker.animate.set_value(85))
+    self.play(theta_tracker.animate.set_value(95))
+    self.slide_break()
+    self.play(FadeOut(line2), FadeOut(line3), FadeOut(roundrect), FadeOut(cartop))
+    self.remove(line2, line3, roundrect, cartop, line4, line_ref) 
+    self.play(ReplacementTransform(line1, line1b)) 
+              
+    self.slide_break()
+
+    
+    #self.remove(line4)
+    ax1, graph, p, label_y, label_x, graph_end, label_graph = self.show_function_graph()
+    self.play(line1b.animate.move_to(graph.get_bottom()))
+  
+    self.play(Create(graph), Create(ax1), Create(label_y), Create(label_x), FadeOut(line1b), Create(label_graph))
+    self.remove(line5)
+    self.wait()
+    for i in range(0,5):
+      self.play(
+              ApplyMethod(p.increment_value,1),
+              run_time=1,
+          )
+      self.wait()
+    self.play(ReplacementTransform(graph, graph_end))
+    self.slide_break()
+    #self.play(ax1.animate.get_area(graph_end, 0,3 , area_color=RED, opacity = 0.2))
+    #self.slide_break()
+    final_graph = VGroup(ax1, label_y, label_x,  graph_end)
+    self.remove(ax1, label_y, label_x,  graph_end, label_graph)
+    self.add(final_graph) 
+    self.play(final_graph.animate.move_to(4*LEFT).scale(0.5))
+    self.slide_break()
+    self.play(Create(bullet_points))
+    self.slide_break()
+    self.play(Create(bullet1))
+    self.slide_break()
+    self.play(Create(bullet2))
+    self.slide_break()
+    self.play(Create(bullet3))
+    self.slide_break()
+    self.play(Create(bullet4))
+    self.slide_break()
+    self.play(Create(bullet5))
+    self.wait()
+
+    
 
 class Motivation(SlideScene):
     def construct(self):
@@ -185,7 +394,7 @@ class CopulaSlide(SlideScene):
                    r"$| \boldsymbol{x}, \boldsymbol{\theta})$",
                    r"$\prod_{i=1}^n$",
                    r"$p_{z_i}(z_i| \boldsymbol{x}_i, \boldsymbol{\theta})$"
-                      ).move_to(sklars.get_bottom() + n*DOWN).set_color(BLACK).scale(0.8)
+                      ).move_to(sklars.get_bottom() + n*DOWN).set_color(BLACK).scale(0.6)
     
     sklar_eq_col = sklar_eq.copy()
     sklar_eq_col.set_color_by_tex_to_color_map({
@@ -199,7 +408,7 @@ class CopulaSlide(SlideScene):
                    r"$| \boldsymbol{x}, \boldsymbol{\theta})$",
                    r"$\prod_{i=1}^n $",
                    r"$\phi_{1}(z_i| \boldsymbol{x}_i, \boldsymbol{\theta})$"
-                      ).move_to(sklars.get_bottom() + n*DOWN).set_color(BLACK).scale(0.8) 
+                      ).move_to(sklars.get_bottom() + n*DOWN).set_color(BLACK).scale(0.6)
     sklar_eq2.set_color_by_tex_to_color_map({
         r"$\phi_n(\boldsymbol{z}; \boldsymbol{0}, R(\boldsymbol{x}, \boldsymbol{\theta}))$": RED_E,
         r"$\phi_{1}(z_i| \boldsymbol{x}_i, \boldsymbol{\theta})$": RED_E
@@ -369,7 +578,7 @@ class VISlide(SlideScene):
     delta_vlb_update =  VGroup(Text("update rule:", font="Noto Sans").set_color(BLACK).scale(0.5),
                                Tex(r"""$ \boldsymbol{\lambda}^{(t+1)} = 
     \boldsymbol{\lambda}^{(t)} + \rho 
-    \nabla_{\boldsymbol{\lambda}}\mathcal{L}(\boldsymbol{\lambda}^{(t)})$""").set_color(BLACK)).arrange(DOWN).move_to(2*RIGHT +2*DOWN).scale(0.8)
+    \nabla_{\boldsymbol{\lambda}}\mathcal{L}(\boldsymbol{\lambda}^{(t)})$""").set_color(BLACK)).arrange(DOWN).move_to(2*RIGHT +2.5*DOWN).scale(0.8)
 
 
     axes = Axes((0, 3), (0, 5)).scale(0.4).move_to(RIGHT)
@@ -485,9 +694,9 @@ class VISlide(SlideScene):
     self.slide_break() 
     self.play(ReplacementTransform(KLD, vlb))
     self.slide_break() 
-    self.add(delta_vlb)
+    self.play(Create(delta_vlb))
     self.slide_break() 
-    self.add(delta_vlb_update)
+    self.play(Create(delta_vlb_update))
     self.wait()
 
 class Data(SlideScene):
