@@ -265,7 +265,7 @@ $controlsArrowAngleActive: 36deg;
 	right: $spacing;
 	left: auto;
 	z-index: 11;
-	color: #000;
+	color: #ff2c2d;
 	pointer-events: none;
 	font-size: 10px;
 
@@ -276,7 +276,7 @@ $controlsArrowAngleActive: 36deg;
 		border: 0;
 		outline: 0;
 		cursor: pointer;
-		color: currentColor;
+		color: #ff2c2d;
 		transform: scale(.9999);
 		transition: color 0.2s ease,
 					opacity 0.2s ease,
@@ -289,7 +289,7 @@ $controlsArrowAngleActive: 36deg;
 		opacity: 0;
 
 		-webkit-appearance: none;
-		-webkit-tap-highlight-color: rgba( 0, 0, 0, 0 );
+		-webkit-tap-highlight-color: #ff2c2d;
 	}
 
 	.controls-arrow:before,
@@ -301,7 +301,7 @@ $controlsArrowAngleActive: 36deg;
 		width: $controlArrowLength;
 		height: $controlArrowThickness;
 		border-radius: $controlArrowThickness/2;
-		background-color: currentColor;
+		background-color: #ff2c2d;
 
 		transition: all 0.15s ease, background-color 0.8s ease;
 		transform-origin: floor(($controlArrowThickness/2)*10)/10 50%;
@@ -594,7 +594,7 @@ $controlsArrowAngleActive: 36deg;
 }
 
 .reveal .slide-number a {
-	color: currentColor;
+	color: #ff2c2d;
 }
 
 .reveal .slide-number-delimiter {
