@@ -57,7 +57,7 @@ class Title(SlideScene):
 
 class EtELearning(SlideScene):
     def construct(self):
-        set_background(self, "End-to-End Learning", True)
+        set_background(self, "Predictive Densities", True)
         frame_title = Tex(r"\fontfamily{lmss}\selectfont \textbf{End-to-End Learning}").move_to(2*UP).set_color(BLACK).scale(0.7)
         ete_diag = ImageMobject('files/ete_diagram/ete.png').move_to(.25*DOWN)
         ete_diag.width = 6
