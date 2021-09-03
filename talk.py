@@ -4,6 +4,7 @@ import math
 from scipy.stats import norm
 
 
+
 def set_background(self, section, lower_line):
     background = Rectangle(
     width = 16,
@@ -224,11 +225,11 @@ class UncertaintyEtE(SlideScene):
     line5.set_color(BLACK)
 
     bullet_points = Tex(r"\fontfamily{lmss}\selectfont Use predictive densities $\hat{p}(y_i|\boldsymbol{x}_i$) to:").set_color(BLACK).scale(0.7).move_to(RIGHT + 1.25*UP)
-    bullet1 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item switch to manual control \end{itemize} \end{itemize}").set_color(BLACK).scale(0.5).move_to(RIGHT + .75*UP).align_to(bullet_points, LEFT).move_to(.5*RIGHT)
-    bullet2 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item compare different end-to-end learners  \end{itemize} \end{itemize}").set_color(BLACK).scale(0.5).move_to(.25*UP).align_to(bullet1, LEFT)
-    bullet3 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item identify level of uncertainty   \end{itemize} \end{itemize}").scale(0.5).set_color(BLACK).move_to(-0.25*UP).align_to(bullet1, LEFT) #in different regions
-    bullet4 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item identify high-risk predictions  \end{itemize} \end{itemize}").set_color(BLACK).scale(0.5).move_to(-.75*UP).align_to(bullet1, LEFT)
-    bullet5 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item identify overconfident learners  \end{itemize} \end{itemize}").set_color(BLACK).scale(0.5).move_to(-1.25*UP).align_to(bullet1, LEFT)
+    bullet1 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item switch to manual control \end{itemize} \end{itemize}").set_color(BLACK).scale(0.6).align_to(bullet_points, LEFT).move_to(.75*UP + .5*RIGHT)
+    bullet2 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item compare different end-to-end learners  \end{itemize} \end{itemize}").set_color(BLACK).scale(0.6).move_to(.25*UP).align_to(bullet1, LEFT)
+    bullet3 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item identify level of uncertainty   \end{itemize} \end{itemize}").scale(0.6).set_color(BLACK).move_to(-0.25*UP).align_to(bullet1, LEFT) #in different regions
+    bullet4 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item identify high-risk predictions  \end{itemize} \end{itemize}").set_color(BLACK).scale(0.6).move_to(-.75*UP).align_to(bullet1, LEFT)
+    bullet5 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item identify overconfident learners  \end{itemize} \end{itemize}").set_color(BLACK).scale(0.6).move_to(-1.25*UP).align_to(bullet1, LEFT)
     #bullet6 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item identify predictive variance  \end{itemize} \end{itemize}").set_color(BLACK).scale(0.7).move_to(-2.5*UP).align_to(bullet1, LEFT)
     #bullet7 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item identify prediction intervals  \end{itemize} \end{itemize}").move_to(DOWN).set_color(BLACK).scale(0.7).move_to(-2.75*UP).align_to(bullet1, LEFT)
 
@@ -262,8 +263,6 @@ class UncertaintyEtE(SlideScene):
       self.wait()
     self.play(ReplacementTransform(graph, graph_end))
     self.slide_break()
-    #self.play(ax1.animate.get_area(graph_end, 0,3 , area_color=RED, opacity = 0.2))
-    #self.slide_break()
     final_graph = VGroup(ax1, label_y, label_x,  graph_end)
     self.remove(ax1, label_y, label_x,  graph_end, label_graph)
     self.add(final_graph) 
@@ -280,7 +279,7 @@ class UncertaintyEtE(SlideScene):
     self.play(Create(bullet4))
     self.slide_break()
     self.play(Create(bullet5))
-    self.wait()
+    self.wait(0.5)
 
     
 
@@ -520,7 +519,7 @@ class CopulaSlide(SlideScene):
     self.add(final_exp_title)
     self.slide_break() 
     self.add(final_exp_text)
-    self.slide_break() 
+    self.slide_break(0.5) 
 
 
 
@@ -575,25 +574,6 @@ class VIvsHMC(SlideScene):
         self.slide_break()
         self.play(Create(prop_mcmc), Create(prop_vi))
         self.wait(0.5)
-        
-class ExampleSlide(SlideScene):
-    def construct(self):
-        circle = Circle(radius=1, color=BLUE)
-        dot = Dot()
-        dot2 = dot.copy().shift(RIGHT)
-        self.add(dot)
-
-        line = Line([3, 0, 0], [5, 0, 0])
-        self.add(line)
-
-        self.play(GrowFromCenter(circle))
-        self.slide_break()
-        self.play(Transform(dot, dot2))
-        self.slide_break()
-        self.play(MoveAlongPath(dot, circle), run_time=2, rate_func=linear)
-        self.slide_break()
-        self.play(Rotating(dot, about_point=[2, 0, 0]), run_time=1.5)
-        self.wait()
 
 
 class VISlide(SlideScene):
@@ -709,7 +689,7 @@ class VISlide(SlideScene):
     #target_label = axes.get_graph_label(target_graph, Tex(r"p(\\boldsymbol{\\vartheta}| \\boldsymbol{x}, \\boldsymbol{y})")).move_to(0.1*LEFT + UP).scale(0.5)
     target_label = Tex(r"""\fontfamily{lmss}\selectfont target density $p(\boldsymbol{\vartheta}| \boldsymbol{x}, \boldsymbol{y})$""").set_color(BLUE).scale(0.5)
     v_approx_label = Tex(r""" \fontfamily{lmss}\selectfont variational density $q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})$""").set_color(RED_E).scale(0.5)
-    always(v_approx_label.next_to, target_graph, .5*RIGHT)
+    always(v_approx_label.next_to, target_graph, .5*UP + .5*RIGHT)
     always(target_label.next_to, target_graph, UP)
     #v_approx_label = axes.get_graph_label(v_approx, r"q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})").move_to(2*RIGHT + UP).scale(0.5)
 
@@ -740,7 +720,7 @@ class VISlide(SlideScene):
     self.play(Create(delta_vlb))
     self.slide_break() 
     self.play(Create(delta_vlb_update))
-    self.wait()
+    self.wait(0.5)
 
 class Data(SlideScene):
     def construct(self):
@@ -751,7 +731,7 @@ class Data(SlideScene):
 
 class PostMeanSD(SlideScene):
     def construct(self):
-        set_background(self, "Neural Linear Model", True)
+        set_background(self, "Accuracy VI vs. HMC", True)
 
         hs_means = ImageMobject('files/accuracy_horseshoe/hs_means.png')
         hs_means.width = 6
@@ -763,9 +743,9 @@ class PostMeanSD(SlideScene):
 
         hs_plots = Group(hs_means,hs_sd).arrange() #.move_to(np.array([5, -3.5, 0]))
         
-        title = Tex(r"\fontfamily{lmss}\selectfont Accuracy VI vs. HMC").move_to(hs_plots.get_top() + .5*UP).set_color(BLACK).scale(0.5)
+        title = Tex(r"\fontfamily{lmss}\selectfont Accuracy VI vs. HMC").move_to( 2*UP).set_color(BLACK).scale(0.7)
         
-        conclusion = Text("The means are estimated accuracely but some misestimation for the s.d.", font="Noto Sans").set_color(BLACK).move_to(hs_plots.get_bottom() + .75*DOWN).scale(0.5)
+        conclusion = Text("The means are estimated accurately but some misestimation for the s.d.", font="Noto Sans").set_color(BLACK).move_to(hs_plots.get_bottom() + .75*DOWN).scale(0.5)
         conclusion.bg = SurroundingRectangle(conclusion, color=RED, fill_color=RED_A, fill_opacity=.2)
 
         self.add(title, hs_plots)
@@ -775,7 +755,7 @@ class PostMeanSD(SlideScene):
 
 class Calibration(SlideScene):
     def construct(self):
-        set_background(self, "Neural Linear Model", True)
+        set_background(self, "Calibration", True)
 
         marg_cal = ImageMobject('files/calibration/marginal_calibration.png')
         marg_cal.width = 6
@@ -787,13 +767,11 @@ class Calibration(SlideScene):
 
         cal_plots = Group(marg_cal,prob_cal).arrange() 
         
-        title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Marginal \& Probability Calibration}""").move_to(cal_plots.get_top() + .5*UP).set_color(BLACK).scale(0.5)
+        title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Marginal \& Probability Calibration}""").move_to(2*UP).set_color(BLACK).scale(0.7)
         
         conclusion = Text("The IC-NLM is better calibrated than MC-Dropout and the Mixture Density Network", font="Noto Sans").set_color(BLACK).move_to(cal_plots.get_bottom() + .75*DOWN).scale(0.5)
         conclusion.bg = SurroundingRectangle(conclusion, color=RED, fill_color=RED_A, fill_opacity=.2)
 
-
-        #placeholder = Tex("Placeholder neural linear model").set_color(BLACK)
         self.add(title, cal_plots)
         self.slide_break()
         self.play(Create(conclusion), Create(conclusion.bg))
@@ -802,9 +780,6 @@ class Calibration(SlideScene):
 class PredictionIntervals(SlideScene):
     def construct(self):
         set_background(self, "Neural Linear Model", True)
-        myTemplate = TexTemplate()
-        myTemplate.add_to_preamble(r"\usepackage[T1]{fontenc}")
-        myTemplate.add_to_preamble(r"\usepackage{lmodern}")
 
         cov_rates = ImageMobject('files/prediction_intervals/coverage_rates.png')
         cov_rates.width = 6
@@ -816,7 +791,7 @@ class PredictionIntervals(SlideScene):
 
         cal_plots = Group(cov_rates, errconf).arrange() #.move_to(np.array([5, -3.5, 0]))
         
-        title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Prediction Intervals}").move_to(cal_plots.get_top() + .5*UP).set_color(BLACK).scale(0.5)
+        title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Prediction Intervals}").move_to(2*UP).set_color(BLACK).scale(0.7)
         
         conclusion = Text("The IC-NLM provides accurate coverage rates but improvable early warning properties ", font="Noto Sans").set_color(BLACK).move_to(cal_plots.get_bottom() + .75*DOWN).scale(0.5)
         conclusion.bg = SurroundingRectangle(conclusion, color=RED, fill_color=RED_A, fill_opacity=.2)
@@ -834,7 +809,7 @@ class OutlookDiscussion(SlideScene):
         \item Regularized horseshoe prior
         \item Combine densities with route planning
         \item Identify several steering actions
-        \item Integrate VI into training
+        \item Integrate VI into loss function
         \item Loss of information of neural linear models vs. full model uncertainty
         \end{itemize}
         """).set_color(BLACK).scale(0.5)
