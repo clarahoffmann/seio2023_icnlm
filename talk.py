@@ -2,6 +2,7 @@ from manim_slide import *
 import imageio
 import math
 from scipy.stats import norm
+from neural_network_manim import NeuralNetworkMobject
 
 
 
@@ -59,7 +60,7 @@ class Title(SlideScene):
 class EtELearning(SlideScene):
     def construct(self):
         set_background(self, "Predictive Densities", True)
-        frame_title = Tex(r"\fontfamily{lmss}\selectfont \textbf{End-to-End Learning}").move_to(2*UP).set_color(BLACK).scale(0.7)
+        frame_title = Tex(r"\fontfamily{lmss}\selectfont \textbf{End-to-End Learning}").move_to(2.5*UP).set_color(BLACK).scale(0.7)
         ete_diag = ImageMobject('files/ete_diagram/ete.png').move_to(.25*DOWN)
         ete_diag.width = 6
         ete_diag.height = 4
@@ -82,10 +83,10 @@ class UncertaintyEtE(SlideScene):
   def show_function_graph(self):
     def func(x, degree):
       #mixture 1
-      rv1 = norm(loc = 1.5, scale = 0.2)
-      rv2 = norm(loc = 0.5, scale = 0.2)
-      rv3 = norm(loc = 0, scale = 0.2)
-      rv4 = norm(loc = 2.2, scale = 0.1)
+      rv1 = norm(loc = 1.5, scale = 0.4)
+      rv2 = norm(loc = 0.5, scale = 0.3)
+      rv3 = norm(loc = 0.2, scale = 0.6)
+      rv4 = norm(loc = 2, scale = 0.4)
       
       a1 = max([0,5 - degree*2])
       a2 = degree
@@ -159,7 +160,7 @@ class UncertaintyEtE(SlideScene):
   def construct(self):
 
     set_background(self, "Introduction", False) 
-    frame_title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Predictive Densities for End-to-End Learning} ").move_to(2*UP).set_color(BLACK).scale(0.7)
+    frame_title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Predictive Densities for End-to-End Learning} ").move_to(2.5*UP).set_color(BLACK).scale(0.7)
     theta_tracker = ValueTracker(110)
 
     line1 = Line(start = 2*LEFT, end = 2*RIGHT, path_arc = np.pi)
@@ -292,17 +293,17 @@ class Motivation(SlideScene):
         
         
         title = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \item  Shortcomings of current methods for uncertainty quantification: \end{itemize}").move_to(np.array([-2, 1, 0])).set_color(BLACK).scale(0.5)
-        problems1 = Tex(r""" \fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item not scalable \end{itemize} \end{itemize}}""").scale(0.5).set_color(BLACK).move_to(.5*UP + 3*LEFT)
-        problems2 = Tex(r"""\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item have to be evaluated in parallel  \end{itemize} \end{itemize}}""").scale(0.5).set_color(BLACK).move_to(0*UP +  2*LEFT)
-        problems3 = Tex(r"""\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item strong parametric assumptions \end{itemize} \end{itemize}}""").scale(0.5).set_color(BLACK).move_to(-.5*UP + 2*LEFT)
-        problems4 = Tex(r"""\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item not calibrated \end{itemize} \end{itemize}}""").scale(0.5).set_color(BLACK).move_to(-1*UP + 2.9*LEFT)
+        problems1 = Tex(r""" \fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item not scalable (BNNs) \end{itemize} \end{itemize}}""").scale(0.5).set_color(BLACK).move_to(title.get_bottom() + .5*LEFT)
+        problems2 = Tex(r"""\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item have to be evaluated in parallel (MC-dropout, ensembles)  \end{itemize} \end{itemize}}""").scale(0.5).set_color(BLACK).align_to(problems1).move_to(0.5*DOWN)
+        problems3 = Tex(r"""\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item strong parametric assumptions (simpler neural linear models) \end{itemize} \end{itemize}}""").scale(0.5).set_color(BLACK).align_to(problems1).move_to(1*DOWN)
+        problems4 = Tex(r"""\fontfamily{lmss}\selectfont \begin{itemize} \begin{itemize} \item not calibrated (standard) \end{itemize} \end{itemize}}""").scale(0.5).set_color(BLACK).align_to(problems1).move_to(1.5*DOWN)
 
         
         solution = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Solution}: Implicit-copula neural linear model of Klein, Nott, Smith 2020 """).set_color(BLACK).scale(.7).align_to(title, LEFT).move_to(2*DOWN)
         solution.bg = SurroundingRectangle(solution, color=GREEN_D, fill_color=GREEN_A, fill_opacity=.2)
         
         solutions = VGroup(solution, solution.bg)
-        frame_title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Problems in Uncertainty Quantification for EtE Learning} """).move_to(2*UP).set_color(BLACK).scale(0.7)
+        frame_title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Problems in Uncertainty Quantification for EtE Learning} """).move_to(2.5*UP).set_color(BLACK).scale(0.7)
 
         self.add(frame_title, title)
         self.slide_break()
@@ -325,18 +326,80 @@ class Notation(SlideScene):
         self.wait(0.5)
 
 class NLM(SlideScene):
-    def construct(self):
-        set_background(self, "Neural Linear Model", True)
-        placeholder = Tex("Placeholder neural linear model").set_color(BLACK)
-        self.add(placeholder)
-        self.wait(0.5)
+  def construct(self):
+    set_background(self, "Neural Linear Model", True)
+
+    title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Neural Linear Models} """).move_to(2.5*UP).set_color(BLACK).scale(0.9)
+
+
+    input = ImageMobject('files/80_436run1.png').scale(0.05).move_to(6*LEFT + .5*DOWN)
+    input_test = Tex(r'input image $\boldsymbol{x}_i$').move_to(input.get_bottom()).scale(0.5).set_color(BLACK)
+
+    myNetwork = NeuralNetworkMobject([8, 5, 1]).set_color(LIGHT_GRAY).scale(0.75).move_to(.5*DOWN)
+    output_text1 = Tex(r"""\fontfamily{lmss}\selectfont predicted""").move_to(myNetwork.get_right() + 1*RIGHT + .5*UP).scale(0.6).set_color(BLACK) #.move_to(1.7*RIGHT)
+    output_text2 = Tex(r' \fontfamily{lmss}\selectfont steering angle').move_to(output_text1.get_bottom() + 0.3*DOWN).scale(0.6).set_color(BLACK)
+    output_text3 = Tex(r'$\hat{y}_i = B_{\boldsymbol{\zeta}}(\boldsymbol{x})\boldsymbol{\beta}$').move_to(output_text2.get_bottom()+ 0.3*DOWN).scale(0.6).set_color(BLACK)
+
+    Bzeta = Rectangle(
+        width = .6,
+        height = 2.75,
+        stroke_width = 2,
+        color = RED,
+        fill_color = GRAY,
+        fill_opacity = 0).move_to(myNetwork.get_center())
+
+    Bzeta_text = Tex(r"""\fontfamily{lmss}\selectfont deep basis functions $B_{\boldsymbol{\zeta}}(\boldsymbol{x_i})$""").move_to(Bzeta.get_bottom() + .5*DOWN).set_color(RED).scale(0.7)
+
+    add_error = Tex(r""" $+ \varepsilon_i$,   $ \quad \varepsilon_i \sim N(0,\sigma^2)$""").move_to(output_text3.get_right() + 1*RIGHT).scale(0.6).set_color(BLACK)
+    cnn = Rectangle(
+              width = 1,
+              height = 1,
+              stroke_width = 1,
+              fill_color = GRAY,
+              fill_opacity = 1).move_to(3*LEFT  + .5*DOWN)
+
+    cnn1 = cnn.copy().move_to(cnn.get_center() + np.array([.25,.25,0])).set_color(GRAY)
+    cnn2 = cnn.copy().move_to(cnn.get_center() + np.array([.5,.5,0])).set_color(GRAY)
+    
+    cnn_text = Text('Conv Layers').move_to(cnn.get_center()).scale(0.2).set_color(BLACK)
+    cnn_all = VGroup (cnn2, cnn1, cnn, cnn_text)
+
+    # Arrows
+    arrow_input_cnn = Arrow(input.get_right()  , cnn.get_left() , 
+                            buff=0, stroke_width= 2, 
+                            max_tip_length_to_length_ratio = 0.05).set_color(BLACK).scale(0.2)
+    arrow_cnn_dnn = Arrow(cnn.get_right() + 0.25*RIGHT, myNetwork.get_left() + 0.5*RIGHT, buff=0, 
+                            stroke_width= 2, 
+                            max_tip_length_to_length_ratio = 0.05).set_color(BLACK).scale(0.2)
+    
+    
+
+    #myNetwork.label_outputs_text([r'predicted steering angle'])
+
+
+    self.add(title)
+    self.add(input, input_test)
+    self.play(Create(arrow_input_cnn))
+    self.slide_break()
+    self.play(Create(cnn_all))
+    self.slide_break()
+    self.play(Create(arrow_cnn_dnn))
+    self.slide_break()
+    self.play(Write(myNetwork))
+    self.slide_break()
+    self.play(Create(Bzeta), Create(Bzeta_text))
+    self.slide_break()
+    self.play(Create(output_text1), Create(output_text2), Create(output_text3)) # 
+    self.slide_break()
+    self.play(Create(add_error))
+    self.wait(0.5)
 
 class CopulaSlide(SlideScene):
   def construct(self):
     set_background(self, "Copula Model", True)
 
 
-    title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Implicit Copula Neural Linear Model (IC-NLM)} """).move_to(2*UP).set_color(BLACK).scale(0.9)
+    title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Implicit Copula Neural Linear Model (IC-NLM)} """).move_to(2.5*UP).set_color(BLACK).scale(0.9)
 
     nlm_text = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \item pseudo regression: \end{itemize}").set_color(BLACK).scale(0.9)
     nlm1 = Tex(r"$\Tilde{Z} = $").set_color(BLACK).scale(0.9) #.move_to(RIGHT)
@@ -384,7 +447,7 @@ class CopulaSlide(SlideScene):
     rectangle = Rectangle(height=2, width=3)
 
     #sklars = Text(r"Sklar's theorem", font="Noto Sans").set_color(BLACK).scale(0.5).move_to(.5*UP)
-    sklars = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Sklar's theorem} """).move_to(2*UP).set_color(BLACK).scale(0.7)
+    sklars = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Sklar's theorem} """).move_to(2.5*UP).set_color(BLACK).scale(0.7)
     n = 2
     sklar_eq = Tex(r"$p(\boldsymbol{z} | \boldsymbol{x}, \boldsymbol{\theta})$",
                    r"$ = $",
@@ -435,7 +498,7 @@ class CopulaSlide(SlideScene):
     # this copula density involves inverting an nxn matrix 
     # as a solution we evaluate the density of y conditional on the model parameters
     # and integrate over them, so that the final expression we're interest in is
-    final_exp_title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Target Expression} """).move_to(2*UP).set_color(BLACK).scale(0.7)
+    final_exp_title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Target Expression} """).move_to(2.5*UP).set_color(BLACK).scale(0.7)
     n = 2
     final_expr = Tex(r"$p(\boldsymbol{y} | \boldsymbol{x}) = \int p(\boldsymbol{y}| \boldsymbol{x}, \boldsymbol{\beta}, \boldsymbol{\theta}) $",
                      r"$p(\boldsymbol{\beta}, \boldsymbol{\theta}| \boldsymbol{x}, \boldsymbol{y})$",
@@ -528,7 +591,7 @@ class VIvsHMC(SlideScene):
     def construct(self):
         set_background(self, "VI vs. HMC", True)
         title = Tex(r"""\fontfamily{lmss}\selectfont 
-        \textbf{2 Approaches to estimate}  $p(\boldsymbol{\vartheta}|\boldsymbol{x}, \boldsymbol{y})$""").move_to(2*UP).set_color(BLACK).scale(0.9)
+        \textbf{Two Approaches to estimate}  $p(\boldsymbol{\vartheta}|\boldsymbol{x}, \boldsymbol{y})$""").move_to(2.5*UP).set_color(BLACK).scale(0.9)
         mcmc = Tex(r"""\fontfamily{lmss}\selectfont Markov chain Monte-Carlo""").move_to(3.5*LEFT + 1.25*UP).set_color(BLACK).scale(0.6)
         vi = Tex(r"""\fontfamily{lmss}\selectfont Variational Inference""").move_to(3.5*RIGHT + 1.25*UP).set_color(BLACK).scale(0.6)
         
@@ -554,8 +617,8 @@ class VIvsHMC(SlideScene):
         acc_vi = Tex(r"""\fontfamily{lmss}\selectfont approximative \xmark""").set_color(RED_D).move_to(3.5*RIGHT + -.5*UP).scale(0.6)
 
         estimation_type = Tex(r"\fontfamily{lmss}\selectfont estimation type").move_to(-1.5*UP).scale(0.5).set_color(BLACK)
-        prop_mcmc = Tex(r"""\fontfamily{lmss}\selectfont numerical sample""").set_color(BLACK).move_to(3.5*LEFT + -1.5*UP).scale(0.6)
-        prop_vi = Tex(r"""\fontfamily{lmss}\selectfont closed-form solution """).set_color(BLACK).move_to(3.5*RIGHT + -1.5*UP).scale(0.6)
+        prop_mcmc = Tex(r"""\fontfamily{lmss}\selectfont numerical sample""").set_color(BLACK).move_to(3.5*LEFT + -1.5*UP).scale(0.6).set_color(GREEN_D)
+        prop_vi = Tex(r"""\fontfamily{lmss}\selectfont closed-form solution """).set_color(BLACK).move_to(3.5*RIGHT + -1.5*UP).scale(0.6).set_color(GREEN_D)
 
         self.add(title)
         self.add(mcmc)
@@ -579,6 +642,7 @@ class VIvsHMC(SlideScene):
 class VISlide(SlideScene):
   def construct(self):
     set_background(self, "Variational Inference", True)
+    title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Variational Inference}""").move_to(2.5*UP).set_color(BLACK).scale(0.9)
     var_density = Tex(r"""$q_{\boldsymbol{\lambda}}(\boldsymbol{\beta}, \boldsymbol{\theta})$""").set_color(RED_E)
     member = VGroup(Text("approximation family:", font="Noto Sans").set_color(BLACK).scale(0.5),
                     Tex(r"""$q_{\boldsymbol{\lambda}}(\boldsymbol{\beta}, \boldsymbol{\theta}) = 
@@ -600,7 +664,7 @@ class VISlide(SlideScene):
     
     delta_vlb_update =  VGroup(Text("update rule:", font="Noto Sans").set_color(BLACK).scale(0.5),
                                Tex(r"""$ \boldsymbol{\lambda}^{(t+1)} = 
-    \boldsymbol{\lambda}^{(t)} + \rho 
+    \boldsymbol{\lambda}^{(t)} + \boldsymbol{\rho}^{(t)} 
     \nabla_{\boldsymbol{\lambda}}\mathcal{L}(\boldsymbol{\lambda}^{(t)})$""").set_color(BLACK)).arrange(DOWN).move_to(2*RIGHT +2.5*DOWN).scale(0.8)
 
 
@@ -689,12 +753,12 @@ class VISlide(SlideScene):
     #target_label = axes.get_graph_label(target_graph, Tex(r"p(\\boldsymbol{\\vartheta}| \\boldsymbol{x}, \\boldsymbol{y})")).move_to(0.1*LEFT + UP).scale(0.5)
     target_label = Tex(r"""\fontfamily{lmss}\selectfont target density $p(\boldsymbol{\vartheta}| \boldsymbol{x}, \boldsymbol{y})$""").set_color(BLUE).scale(0.5)
     v_approx_label = Tex(r""" \fontfamily{lmss}\selectfont variational density $q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})$""").set_color(RED_E).scale(0.5)
-    always(v_approx_label.next_to, target_graph, .5*UP + .5*RIGHT)
+    always(v_approx_label.next_to, target_graph, .5*RIGHT)
     always(target_label.next_to, target_graph, UP)
     #v_approx_label = axes.get_graph_label(v_approx, r"q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})").move_to(2*RIGHT + UP).scale(0.5)
 
     final_graph = VGroup(axes, target_graph,  v_approx2) #target_label, v_approx_label,
-    self.add(axes) 
+    self.add(axes, title) 
     self.play(
             Create(target_graph),
             Create(target_label),
@@ -709,7 +773,7 @@ class VISlide(SlideScene):
     self.play(p.animate.set_value(4), run_time=3)
     self.slide_break()
     self.remove(axes, target_graph, v_approx, label)
-    self.play(final_graph.animate.move_to(4*LEFT))
+    self.play(final_graph.animate.move_to(4*LEFT), title.animate.move_to(4*LEFT + 2.5*UP))
     self.slide_break()
     self.add(member)
     self.slide_break() 
@@ -743,7 +807,7 @@ class PostMeanSD(SlideScene):
 
         hs_plots = Group(hs_means,hs_sd).arrange() #.move_to(np.array([5, -3.5, 0]))
         
-        title = Tex(r"\fontfamily{lmss}\selectfont Accuracy VI vs. HMC").move_to( 2*UP).set_color(BLACK).scale(0.7)
+        title = Tex(r"\fontfamily{lmss}\selectfont Accuracy VI vs. HMC").move_to( 2.5*UP).set_color(BLACK).scale(0.7)
         
         conclusion = Text("The means are estimated accurately but some misestimation for the s.d.", font="Noto Sans").set_color(BLACK).move_to(hs_plots.get_bottom() + .75*DOWN).scale(0.5)
         conclusion.bg = SurroundingRectangle(conclusion, color=RED, fill_color=RED_A, fill_opacity=.2)
@@ -767,7 +831,7 @@ class Calibration(SlideScene):
 
         cal_plots = Group(marg_cal,prob_cal).arrange() 
         
-        title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Marginal \& Probability Calibration}""").move_to(2*UP).set_color(BLACK).scale(0.7)
+        title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Marginal \& Probability Calibration}""").move_to(2.5*UP).set_color(BLACK).scale(0.7)
         
         conclusion = Text("The IC-NLM is better calibrated than MC-Dropout and the Mixture Density Network", font="Noto Sans").set_color(BLACK).move_to(cal_plots.get_bottom() + .75*DOWN).scale(0.5)
         conclusion.bg = SurroundingRectangle(conclusion, color=RED, fill_color=RED_A, fill_opacity=.2)
@@ -791,7 +855,7 @@ class PredictionIntervals(SlideScene):
 
         cal_plots = Group(cov_rates, errconf).arrange() #.move_to(np.array([5, -3.5, 0]))
         
-        title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Prediction Intervals}").move_to(2*UP).set_color(BLACK).scale(0.7)
+        title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Prediction Intervals}").move_to(2.5*UP).set_color(BLACK).scale(0.7)
         
         conclusion = Text("The IC-NLM provides accurate coverage rates but improvable early warning properties ", font="Noto Sans").set_color(BLACK).move_to(cal_plots.get_bottom() + .75*DOWN).scale(0.5)
         conclusion.bg = SurroundingRectangle(conclusion, color=RED, fill_color=RED_A, fill_opacity=.2)
@@ -804,7 +868,7 @@ class PredictionIntervals(SlideScene):
 class OutlookDiscussion(SlideScene):
     def construct(self):
         set_background(self, "Outlook & Discussion", True)
-        title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Outlook and Discussion}").move_to(2*UP).set_color(BLACK).scale(0.7)
+        title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Outlook and Discussion}").move_to(2.5*UP).set_color(BLACK).scale(0.7)
         bullet_points = Tex(r"""\fontfamily{lmss}\selectfont \begin{itemize}
         \item Regularized horseshoe prior
         \item Combine densities with route planning
