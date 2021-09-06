@@ -364,18 +364,20 @@ class NLM(SlideScene):
     output_text2 = Tex(r' \fontfamily{lmss}\selectfont steering angle').move_to(output_text1.get_bottom() + 0.3*DOWN).scale(0.6).set_color(BLACK)
     output_text3a = Tex(r"$\hat{y}_i$",
                         r"$=$",
-                        r"$B_{\boldsymbol{\zeta}}(\boldsymbol{x})$",
+                        r"$\psi_{\boldsymbol{\zeta}}(\boldsymbol{x}_i)$",
                         r"$\boldsymbol{\beta}$").move_to(output_text2.get_bottom()+ 0.3*DOWN).scale(0.6).set_color(BLACK)
     output_text3a.set_color_by_tex_to_color_map({
-        r"$B_{\boldsymbol{\zeta}}(\boldsymbol{x})$": RED_D
+        r"$\psi_{\boldsymbol{\zeta}}(\boldsymbol{x}_i)$": RED_D,
+        r"$\boldsymbol{\beta}$": GREEN_D,
              }) 
     output_text3b = Tex(r"$\hat{z}_i$",
                         r"$=$",
-                        r"$B_{\boldsymbol{\zeta}}(\boldsymbol{x})$",
+                        r"$\psi_{\boldsymbol{\zeta}}(\boldsymbol{x}_i)$",
                         r"$\boldsymbol{\beta}$").set_color(BLACK).move_to(output_text2.get_bottom()+ 0.3*DOWN).scale(0.6)
     output_text3b.set_color_by_tex_to_color_map({
-        r"$B_{\boldsymbol{\zeta}}(\boldsymbol{x})$": RED_D,
-        r"$\hat{z}_i$": PURPLE_D
+        r"$\psi_{\boldsymbol{\zeta}}(\boldsymbol{x}_i)$": RED_D,
+        r"$\hat{z}_i$": PURPLE_D,
+        r"$\boldsymbol{\beta}$": GREEN_D
              }) 
     output_text4 = Tex(r'$\boldsymbol{\beta} | \boldsymbol{\theta}, \sigma^2 \sim N(0, \sigma^2P(\boldsymbol{\theta})^{-1})$').move_to(output_text3a.get_bottom()+ 0.3*DOWN).scale(0.6).set_color(GREEN_E).align_to(output_text3a, LEFT)
     output_text5 = Tex(r"$z_i = \Phi^{-1}F_Y(y_i)$").move_to(output_text4.get_bottom()+ 0.3*DOWN).scale(0.6).set_color(PURPLE_D).align_to(output_text4, LEFT)
@@ -387,7 +389,7 @@ class NLM(SlideScene):
         fill_color = GRAY,
         fill_opacity = 0).move_to(myNetwork.get_center())
 
-    Bzeta_text = Tex(r"""\fontfamily{lmss}\selectfont deep basis functions $B_{\boldsymbol{\zeta}}(\boldsymbol{x_i})$""").move_to(Bzeta.get_bottom() + .5*DOWN).set_color(RED_D).scale(0.7)
+    Bzeta_text = Tex(r"""\fontfamily{lmss}\selectfont deep basis functions $\psi_{\boldsymbol{\zeta}}(\boldsymbol{x_i})$""").move_to(Bzeta.get_bottom() + .5*DOWN).set_color(RED_D).scale(0.7)
 
     add_error = Tex(r""" $+ \varepsilon_i$,   $ \quad \varepsilon_i \sim N(0,\sigma^2)$""").move_to(output_text3a.get_right() + 1.4*RIGHT).scale(0.6).set_color(BLACK)
     cnn = Rectangle(
@@ -450,7 +452,7 @@ class CopulaSlide(SlideScene):
 
     nlm_text = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \item pseudo regression: \end{itemize}").set_color(BLACK).scale(0.9)
     nlm1 = Tex(r"$\Tilde{Z} = $").set_color(BLACK).scale(0.9) #.move_to(RIGHT)
-    nlm2 = Tex(r"$B_{\boldsymbol{\zeta}}(\boldsymbol{x})\boldsymbol{\beta}$").set_color(BLACK).scale(0.9)
+    nlm2 = Tex(r"$\psi_{\boldsymbol{\zeta}}(\boldsymbol{x})\boldsymbol{\beta}$").set_color(BLACK).scale(0.9)
     nlm3 = Tex(r"$ + \boldsymbol{\varepsilon}$").set_color(BLACK).scale(0.9)
     nlm = VGroup(VGroup(nlm_text, nlm1).arrange(RIGHT, buff=MED_SMALL_BUFF), nlm2, nlm3).arrange(RIGHT, buff=SMALL_BUFF).move_to(np.array([-1.5, 1, 0])).scale(0.7)
 
@@ -531,9 +533,9 @@ class CopulaSlide(SlideScene):
     # Now we use the same copula to model y with the shrinkage parameters integrated out
     # note that even though the copula from before is a Gaussian copula
     # the copula with the shrinkage parameters integrated out can be far from Gaussian
-    copula_dens_y = Tex(r"$p(\boldsymbol{y}| \boldsymbol{x}) = c_{DNN}^* ($",
+    copula_dens_y = Tex(r"$p(\boldsymbol{y}| \boldsymbol{x}, \boldsymbol{\theta}) = c_{DNN}^* ($",
                         r"$F_Y(y_1), \ldots, F_Y(y_n)$",
-                         r"$| \boldsymbol{x}) \prod_{i=1}$",
+                         r"$| \boldsymbol{x}, \boldsymbol{\theta}) \prod_{i=1}$",
                          r"$F_Y(y_i)$"
                    ).move_to(copula_dens.get_bottom() + n/2*DOWN).set_color(BLACK).scale(0.8)
     
@@ -554,7 +556,7 @@ class CopulaSlide(SlideScene):
     final_expr.set_color_by_tex_to_color_map({
         r"$p(\boldsymbol{\beta}, \boldsymbol{\theta}| \boldsymbol{x}, \boldsymbol{y})$": RED_E
              })
-    final_exp_text_text = Tex(r"\fontfamily{lmss}\selectfont known up to normalizing constant").move_to(final_expr.get_bottom() + DOWN + RIGHT ).set_color(BLACK).scale(0.8)
+    final_exp_text_text = Tex(r"\fontfamily{lmss}\selectfont known up to normalizing constant").move_to(final_expr.get_bottom() + DOWN + RIGHT ).set_color(BLACK).scale(0.6)
     final_exp_text_line =  Line(final_expr.get_bottom() + RIGHT, final_exp_text_text.get_top(), stroke_width = 1).set_color(BLACK)
     final_exp_text = VGroup(final_exp_text_text, final_exp_text_line)
     
@@ -634,7 +636,7 @@ class VIvsHMC(SlideScene):
     def construct(self):
         set_background(self, "VI vs. HMC", True)
         title = Tex(r"""\fontfamily{lmss}\selectfont 
-        \textbf{Two Approaches to estimate}  $p(\boldsymbol{\vartheta}|\boldsymbol{x}, \boldsymbol{y})$""").move_to(2.75*UP).set_color(BLACK).scale(0.9)
+        \textbf{Two Approaches to estimate}  $p(\boldsymbol{\beta}, \boldsymbol{\theta}|\boldsymbol{x}, \boldsymbol{y})$""").move_to(2.75*UP).set_color(BLACK).scale(0.9)
         mcmc = Tex(r"""\fontfamily{lmss}\selectfont Markov chain Monte-Carlo""").move_to(3.5*LEFT + 1.25*UP).set_color(BLACK).scale(0.6)
         vi = Tex(r"""\fontfamily{lmss}\selectfont Variational Inference""").move_to(3.5*RIGHT + 1.25*UP).set_color(BLACK).scale(0.6)
         
@@ -711,7 +713,7 @@ class VISlide(SlideScene):
     \nabla_{\boldsymbol{\lambda}}\mathcal{L}(\boldsymbol{\lambda}^{(t)})$""").set_color(BLACK)).arrange(DOWN).move_to(2*RIGHT +2.5*DOWN).scale(0.8)
 
 
-    axes = Axes((0, 3), (0, 5)).scale(0.4).move_to(RIGHT)
+    axes = Axes((0, 3), (0, 5)).scale(0.4).move_to(.5*LEFT)
 
 
     def func(x):
@@ -800,7 +802,7 @@ class VISlide(SlideScene):
     always(target_label.next_to, target_graph, UP)
     #v_approx_label = axes.get_graph_label(v_approx, r"q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})").move_to(2*RIGHT + UP).scale(0.5)
 
-    citation = Tex(r"Ong, V. M. H., Nott, D. J. and Smith, M. S. (2018). Gaussian variational approximation with a factor co-variance structure. \textit{Journal of Computational and Graphical Statistics}")
+    citation = Tex(r"Ong, V. M. H., Nott, D. J. and Smith, M. S. (2018). Gaussian variational approximation with a factor co-variance structure. \textit{Journal of Computational and Graphical Statistics}").set_color(BLACK).scale(0.3).move_to(2.75*DOWN + 3.5*LEFT)
     final_graph = VGroup(axes, target_graph,  v_approx2) #target_label, v_approx_label,
     self.add(axes, title) 
     self.play(
@@ -834,8 +836,23 @@ class VISlide(SlideScene):
 class Data(SlideScene):
     def construct(self):
         set_background(self, "Data", True)
-        placeholder = Tex("Placeholder data").set_color(BLACK)
-        self.add(placeholder)
+        title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Data \& End-to-End Learner}").move_to( 2.75*UP).set_color(BLACK).scale(0.7)
+
+
+        ex = ImageMobject('files/image_road.png').scale(0.3).move_to(3*RIGHT + 1.25*UP)
+        
+        data0 = Tex(r"\fontfamily{lmss}\selectfont \textbf{comma2k19 data (Schafer et. al, 2018)}:").set_color(BLACK).scale(0.6).move_to(2*UP + 2.5*LEFT)
+        data1 = Tex(r"""\fontfamily{lmss}\selectfont \begin{itemize} \item 33 hours of video data on US highways with steering angles \end{itemize}""").set_color(BLACK).scale(0.5).move_to(1.75*LEFT + 1.5*UP)
+        data2 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \item extracted $n = 450,000$ frames \end{itemize}").set_color(BLACK).scale(0.5).move_to(1*UP).align_to(data1, LEFT)
+        data3 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \item clean and raw version \end{itemize} ").set_color(BLACK).scale(0.5).move_to(.5*UP).align_to(data1, LEFT)
+        pilot = ImageMobject('files/PilotNet.png').scale(1).move_to(1.75*DOWN)
+        pilot_text = Tex(r"\fontfamily{lmss}\selectfont PilotNet Model Architecture (Bojarski et. al, 2016)").move_to(pilot.get_top() + .2*UP).set_color(BLACK).scale(0.6)
+
+        citations = VGroup(Tex(r"Bojarski,  M. et. al. (2016). End to end learning for self-driving cars."),
+        Tex(r"Schafer, H., Santana, E., Haden, A. and Biasini, R. (2018). A commute in data: the comma2k19 dataset.")).arrange(DOWN).move_to(3.2*DOWN + 0*RIGHT).scale(0.3).set_color(BLACK)
+        self.add(ex, title, data0, data1, data2, data3)
+        self.add(pilot, pilot_text)
+        self.add(citations)
         self.wait(0.5)
 
 class PostMeanSD(SlideScene):
