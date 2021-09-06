@@ -32,7 +32,3 @@ file 'file:/Users/clarahoffmann/manim_slides/video_slides/partial_movie_files/Un
 file 'file:/Users/clarahoffmann/manim_slides/video_slides/partial_movie_files/UncertaintyEtE/uncached_00030.mp4'
 file 'file:/Users/clarahoffmann/manim_slides/video_slides/partial_movie_files/UncertaintyEtE/uncached_00031.mp4'
 file 'file:/Users/clarahoffmann/manim_slides/video_slides/partial_movie_files/UncertaintyEtE/uncached_00032.mp4'
-file 'file:/Users/clarahoffmann/manim_slides/video_slides/partial_movie_files/UncertaintyEtE/uncached_00033.mp4'
-file 'file:/Users/clarahoffmann/manim_slides/video_slides/partial_movie_files/UncertaintyEtE/uncached_00034.mp4'
-file 'file:/Users/clarahoffmann/manim_slides/video_slides/partial_movie_files/UncertaintyEtE/uncached_00035.mp4'
-file 'file:/Users/clarahoffmann/manim_slides/video_slides/partial_movie_files/UncertaintyEtE/uncached_00036.mp4'
