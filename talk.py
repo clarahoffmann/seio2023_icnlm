@@ -311,7 +311,7 @@ class Motivation(SlideScene):
 
         solution = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Solution}: Implicit-copula neural linear model of Klein, Nott, Smith (2021) """).set_color(BLACK).scale(.7).align_to(title, LEFT).move_to(2*DOWN)
         solution.bg = SurroundingRectangle(solution, color=GREEN_D, fill_color=GREEN_A, fill_opacity=.2)
-        citation = Tex(r"\fontfamily{lmss}\selectfont Klein, N., Nott, D. J. and Smith, M. S. (2021). Marginally calibrated deep distributional regression. \textit{Journal of Computational and Graphical Statistics}").scale(0.4).move_to(2.9*DOWN + 2.75*LEFT).set_color(BLACK)
+        citation = Tex(r"\fontfamily{lmss}\selectfont Klein, N., Nott, D. J. and Smith, M. S. (2021). Marginally calibrated deep distributional regression. \textit{Journal of Computational and Graphical Statistics}").scale(0.4).move_to(3.2*DOWN + 2.75*LEFT).set_color(BLACK)
         
         solutions = VGroup(solution, solution.bg)
 
@@ -336,7 +336,7 @@ class Notation(SlideScene):
     def construct(self):
         set_background(self, "Variables and Notation", True)
 
-        title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Predictive Densities in EtE Learning} """).move_to(2.75*UP).set_color(BLACK).scale(0.9)
+        title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Predictive Densities in EtE Learning} """).move_to(2.75*UP).set_color(BLACK).scale(0.7)
 
         input_im = ImageMobject('files/angle_20_small.png').scale(0.3).move_to(4*LEFT + 1*UP )
         input_test = Tex(r'\fontfamily{lmss}\selectfont input image $\boldsymbol{x}_i$').scale(0.5).set_color(BLACK).move_to(input_im.get_bottom() + .25*DOWN)
@@ -371,7 +371,7 @@ class NLM(SlideScene):
   def construct(self):
     set_background(self, "Implicit-Copula Neural Linear Model", True)
 
-    title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Implicit-Copula Neural Linear Model} """).move_to(2.75*UP).set_color(BLACK).scale(0.9)
+    title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Implicit-Copula Neural Linear Model} """).move_to(2.75*UP).set_color(BLACK).scale(0.7)
 
 
     input = ImageMobject('files/80_436run1.png').scale(0.05).move_to(3*LEFT + .5*DOWN)
@@ -434,7 +434,7 @@ class NLM(SlideScene):
     
 
     #myNetwork.label_outputs_text([r'predicted steering angle'])
-    citation = Tex(r"\fontfamily{lmss}\selectfont Klein, N., Nott, D. J. and Smith, M. S. (2021). Marginally calibrated deep distributional regression. \textit{Journal of Computational and Graphical Statistics}").scale(0.4).move_to(2.75*DOWN + 2.75*LEFT).set_color(BLACK)
+    citation = Tex(r"\fontfamily{lmss}\selectfont Klein, N., Nott, D. J. and Smith, M. S. (2021). Marginally calibrated deep distributional regression. \textit{Journal of Computational and Graphical Statistics}").scale(0.4).move_to(2.9*DOWN + 2.75*LEFT).set_color(BLACK)
         
 
     self.add(title)
@@ -515,7 +515,7 @@ class CopulaSlide(SlideScene):
     rectangle = Rectangle(height=2, width=3)
 
     #sklars = Text(r"Sklar's theorem", font="Noto Sans").set_color(BLACK).scale(0.5).move_to(.5*UP)
-    sklars = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Sklar's Theorem} """).move_to(2.5*UP).set_color(BLACK).scale(0.7)
+    sklars = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Sklar's Theorem} """).move_to(2.75*UP).set_color(BLACK).scale(0.9)
     n = 2
     sklar_eq = Tex(r"$p(\boldsymbol{z} | \boldsymbol{x}, \boldsymbol{\theta})$",
                    r"$ = $",
@@ -666,7 +666,7 @@ class VIvsHMC(SlideScene):
     def construct(self):
         set_background(self, "VI vs. HMC", True)
         title = Tex(r"""\fontfamily{lmss}\selectfont 
-        \textbf{Two Approaches to estimate}  $p(\boldsymbol{\beta}, \boldsymbol{\theta}|\boldsymbol{x}, \boldsymbol{y})$""").move_to(2.75*UP).set_color(BLACK).scale(0.9)
+        \textbf{Two Approaches to estimate}  $p(\boldsymbol{\beta}, \boldsymbol{\theta}|\boldsymbol{x}, \boldsymbol{y})$""").move_to(2.75*UP).set_color(BLACK).scale(0.7)
         mcmc = Tex(r"""\fontfamily{lmss}\selectfont Markov chain Monte-Carlo""").move_to(3.5*LEFT + 1.25*UP).set_color(BLACK).scale(0.6)
         vi = Tex(r"""\fontfamily{lmss}\selectfont Variational Inference""").move_to(3.5*RIGHT + 1.25*UP).set_color(BLACK).scale(0.6)
         
@@ -717,7 +717,7 @@ class VIvsHMC(SlideScene):
 class VISlide(SlideScene):
   def construct(self):
     set_background(self, "Variational Inference", True)
-    title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Variational Inference}""").move_to(2.75*UP).set_color(BLACK).scale(0.9)
+    title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Variational Inference}""").move_to(2.75*UP).set_color(BLACK).scale(0.7)
     var_density = Tex(r"""$q_{\boldsymbol{\lambda}}(\boldsymbol{\beta}, \boldsymbol{\theta})$""").set_color(RED_E)
     member = VGroup(Text("approximation family:", font="Noto Sans").set_color(BLACK).scale(0.5),
                     Tex(r"""$q_{\boldsymbol{\lambda}}(\boldsymbol{\beta}, \boldsymbol{\theta}) = 
@@ -955,7 +955,7 @@ class BenchmarkStudy(SlideScene):
     def construct(self):
         set_background(self, "Neural Linear Model", True)
 
-        title = Tex(r"""\fontfamily{lmss}\selectfont Benchmark Study""").set_color(BLACK).move_to(2.75*UP).set_color(BLACK).scale(0.7)
+        title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Benchmark Study}""").set_color(BLACK).move_to(2.75*UP).set_color(BLACK).scale(0.7)
 
         bullets = Tex(r"""\fontfamily{lmss}\selectfont \begin{enumerate}
         \item IC-NLM $+$ ridge prior
