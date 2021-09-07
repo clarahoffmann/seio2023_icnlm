@@ -310,7 +310,7 @@ class Motivation(SlideScene):
 
         solution = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Solution}: Implicit-copula neural linear model of Klein, Nott, Smith (2021) """).set_color(BLACK).scale(.7).align_to(title, LEFT).move_to(2*DOWN)
         solution.bg = SurroundingRectangle(solution, color=GREEN_D, fill_color=GREEN_A, fill_opacity=.2)
-        citation = Tex(r"\fontfamily{lmss}\selectfont Klein, N., Nott, D. J. and Smith, M. S. (2021). Marginally calibrated deep distributional regression. \textit{Journal of Computational and Graphical Statistics}").scale(0.4).move_to(2.5*DOWN + 2.75*LEFT).set_color(BLACK)
+        citation = Tex(r"\fontfamily{lmss}\selectfont Klein, N., Nott, D. J. and Smith, M. S. (2021). Marginally calibrated deep distributional regression. \textit{Journal of Computational and Graphical Statistics}").scale(0.4).move_to(2.75*DOWN + 2.75*LEFT).set_color(BLACK)
         
         solutions = VGroup(solution, solution.bg)
 
@@ -338,20 +338,23 @@ class Notation(SlideScene):
         title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Notation} """).move_to(2.75*UP).set_color(BLACK).scale(0.9)
 
 
-        input_im = ImageMobject('files/80_436run1.png').scale(0.1).move_to(4*LEFT )
-        input_test = Tex(r'input image $\boldsymbol{x}_i$').scale(0.5).set_color(BLACK).move_to(input_im.get_bottom())
+        input_im = ImageMobject('files/angle_20_small.png').scale(0.3).move_to(4*LEFT )
+        input_test = Tex(r'input image $\boldsymbol{x}_i$').scale(0.5).set_color(BLACK).move_to(input_im.get_bottom() + .25*DOWN)
         
         st_wheel = ImageMobject('files/steering_wheel.jpeg').scale(0.1)
         st_text = Tex(r'\fontfamily{lmss}\selectfont steering angle $y_i$').move_to(st_wheel.get_bottom() + .5*DOWN).scale(0.5).set_color(BLACK)
 
-        pred = Tex(r'\fontfamily{lmss}\selectfont predictive density $p(y_i | \boldsymbol{x}_i)$').move_to(4*RIGHT).scale(0.5).set_color(BLACK)
+        dens_im =  ImageMobject('files/angle_20.png').scale(0.9).move_to(3.5*RIGHT )
+        pred = Tex(r'\fontfamily{lmss}\selectfont predictive density $p(y_i | \boldsymbol{x}_i)$').move_to(dens_im.get_bottom() + .25*DOWN).scale(0.5).set_color(BLACK)
+        
+        
 
-        self.add(title, input_im, input_test, st_wheel, st_text, pred)
+        self.add(title, input_im, input_test, st_wheel, st_text, pred, dens_im)
         self.wait(0.5)
 
 class NLM(SlideScene):
   def construct(self):
-    set_background(self, "Neural Linear Model", True)
+    set_background(self, "Implicit-Copula Neural Linear Model", True)
 
     title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Neural Linear Models} """).move_to(2.75*UP).set_color(BLACK).scale(0.9)
 
@@ -496,7 +499,7 @@ class CopulaSlide(SlideScene):
     rectangle = Rectangle(height=2, width=3)
 
     #sklars = Text(r"Sklar's theorem", font="Noto Sans").set_color(BLACK).scale(0.5).move_to(.5*UP)
-    sklars = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Sklar's theorem} """).move_to(2.5*UP).set_color(BLACK).scale(0.7)
+    sklars = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Sklar's Theorem} """).move_to(2.5*UP).set_color(BLACK).scale(0.7)
     n = 2
     sklar_eq = Tex(r"$p(\boldsymbol{z} | \boldsymbol{x}, \boldsymbol{\theta})$",
                    r"$ = $",
@@ -504,7 +507,7 @@ class CopulaSlide(SlideScene):
                    r"$| \boldsymbol{x}, \boldsymbol{\theta})$",
                    r"$\prod_{i=1}^n$",
                    r"$p_{z_i}(z_i| \boldsymbol{x}_i, \boldsymbol{\theta})$"
-                      ).move_to(sklars.get_bottom() + n*DOWN).set_color(BLACK).scale(0.6)
+                      ).move_to(sklars.get_bottom() + n*DOWN).set_color(BLACK).scale(0.8)
     
     sklar_eq_col = sklar_eq.copy()
     sklar_eq_col.set_color_by_tex_to_color_map({
@@ -518,7 +521,7 @@ class CopulaSlide(SlideScene):
                    r"$| \boldsymbol{x}, \boldsymbol{\theta})$",
                    r"$\prod_{i=1}^n $",
                    r"$\phi_{1}(z_i| \boldsymbol{x}_i, \boldsymbol{\theta})$"
-                      ).move_to(sklars.get_bottom() + n*DOWN).set_color(BLACK).scale(0.6)
+                      ).move_to(sklars.get_bottom() + n*DOWN).set_color(BLACK).scale(0.8)
     sklar_eq2.set_color_by_tex_to_color_map({
         r"$\phi_n(\boldsymbol{z}; \boldsymbol{0}, R(\boldsymbol{x}, \boldsymbol{\theta}))$": RED_E,
         r"$\phi_{1}(z_i| \boldsymbol{x}_i, \boldsymbol{\theta})$": RED_E
@@ -846,7 +849,7 @@ class Data(SlideScene):
         data2 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \item extracted $n = 450,000$ frames \end{itemize}").set_color(BLACK).scale(0.5).move_to(1*UP).align_to(data1, LEFT)
         data3 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \item clean and raw version \end{itemize} ").set_color(BLACK).scale(0.5).move_to(.5*UP).align_to(data1, LEFT)
         pilot = ImageMobject('files/PilotNet.png').scale(1).move_to(1.75*DOWN)
-        pilot_text = Tex(r"\fontfamily{lmss}\selectfont PilotNet Model Architecture (Bojarski et. al, 2016)").move_to(pilot.get_top() + .2*UP).set_color(BLACK).scale(0.6)
+        pilot_text = Tex(r"\fontfamily{lmss}\selectfont \textbf{PilotNet Model Architecture} (Bojarski et. al, 2016)").move_to(pilot.get_top() + .2*UP + 2.5*LEFT).set_color(BLACK).scale(0.6).align_to(data0, LEFT)
 
         citations = VGroup(Tex(r"Bojarski,  M. et. al. (2016). End to end learning for self-driving cars."),
         Tex(r"Schafer, H., Santana, E., Haden, A. and Biasini, R. (2018). A commute in data: the comma2k19 dataset.")).arrange(DOWN).move_to(3.2*DOWN + 0*RIGHT).scale(0.3).set_color(BLACK)
@@ -855,9 +858,27 @@ class Data(SlideScene):
         self.add(citations)
         self.wait(0.5)
 
+class FullAlgorithm(SlideScene):
+    def construct(self):
+        set_background(self, "Data", True)
+        title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Full Algorithm}").move_to( 2.75*UP).set_color(BLACK).scale(0.7)
+        bullets = Tex(r"""\fontfamily{lmss}\selectfont
+        \begin{enumerate}
+        \item Estimate margin $F_Y$ from all steering angles in data $\boldsymbol{y}= (y_1,...,y_n)^T$
+        \item Train PilotNet DNN to predict the transformed response $z_i = \Phi^{-1}(F_Y(y_i))$ from images of the ahead-lying street $\boldsymbol{x}_i$, $i = 1,...,n$
+        \item Obtain posterior of model parameters $p(\boldsymbol{\beta}, \boldsymbol{\theta}|  \boldsymbol{x}, \boldsymbol{y})$ via MCMC and VI using deep basis functions from previous step
+        \item Compute predictive densities for new covariates $\boldsymbol{x}_0$ at value $y_0$ via $p(y_0 | \boldsymbol{x}_0, \boldsymbol{x}, \boldsymbol{y}) = \int p(y_0 | \boldsymbol{x}_0, \boldsymbol{\beta}, \boldsymbol{\theta}, \boldsymbol{x}, \boldsymbol{y})p(\boldsymbol{\beta}, \boldsymbol{\theta}| \boldsymbol{x}, \boldsymbol{y})d(\boldsymbol{\beta}, \boldsymbol{\theta})$
+        \end{enumerate}""").set_color(BLACK).scale(0.5)
+        
+        bullets2 = Tex(r"""\fontfamily{lmss}\selectfont \begin{itemize}
+         \item[$\rightarrow$] now check accuracy of VI/MCMC \& quality of predictive densities
+         \end{itemize} """).set_color(BLACK).scale(0.7).move_to(bullets.get_bottom() + .5*DOWN)
+        self.add(title, bullets, bullets2)
+        self.wait(0.5)
+
 class PostMeanSD(SlideScene):
     def construct(self):
-        set_background(self, "Accuracy VI vs. HMC", True)
+        set_background(self, "Accuracy VI vs. HMC (Horseshoe Prior)", True)
 
         hs_means = ImageMobject('files/accuracy_horseshoe/hs_means.png')
         hs_means.width = 6
@@ -929,15 +950,24 @@ class PredictionIntervals(SlideScene):
 
 class OutlookDiscussion(SlideScene):
     def construct(self):
-        set_background(self, "Outlook & Discussion", True)
-        title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Outlook and Discussion}").move_to(2.75*UP).set_color(BLACK).scale(0.7)
-        bullet_points = Tex(r"""\fontfamily{lmss}\selectfont \begin{itemize}
+        set_background(self, " Discussion & Outlook", True)
+
+        title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Discussion \& Outlook}").move_to(2.75*UP).set_color(BLACK).scale(0.7)
+        bullet_points0 = Tex(r"""Implicit copula NLM for EtE learning...
+         \begin{itemize}
+         \item can be made scalable via variational inference
+         \item is marginally calibrated and competitively prob. calibrated
+         \item provides informative and reliable prediction intervals
+         \end{itemize}
+         """).move_to(2*UP)
+
+        bullet_points = Tex(r"""\fontfamily{lmss}\selectfont \begin{itemize} Outlook:
         \item Regularized horseshoe prior
         \item Combine densities with route planning
         \item Identify several steering actions
         \item Integrate VI into loss function
         \item Loss of information of neural linear models vs. full model uncertainty
         \end{itemize}
-        """).set_color(BLACK).scale(0.5)
-        self.add(title, bullet_points)
+        """).set_color(BLACK).scale(0.5).move_to(bullet_points0.get_bottom())
+        self.add(title, bullet_points, bullet_points0)
         self.wait(0.5)
