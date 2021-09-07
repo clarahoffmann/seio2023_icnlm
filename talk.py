@@ -356,7 +356,7 @@ class NLM(SlideScene):
   def construct(self):
     set_background(self, "Implicit-Copula Neural Linear Model", True)
 
-    title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Neural Linear Models} """).move_to(2.75*UP).set_color(BLACK).scale(0.9)
+    title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Implicit-Copula Neural Linear Models} """).move_to(2.75*UP).set_color(BLACK).scale(0.9)
 
 
     input = ImageMobject('files/80_436run1.png').scale(0.05).move_to(5*LEFT + .5*DOWN)
