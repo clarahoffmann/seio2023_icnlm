@@ -141,6 +141,7 @@ class UncertaintyEtE(SlideScene):
                     color = BLUE 
                 )
             )
+
         )
     
     label_y = Tex(r"\fontfamily{lmss}\selectfont density").set_color(BLACK).scale(0.5)
@@ -310,7 +311,7 @@ class Motivation(SlideScene):
 
         solution = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Solution}: Implicit-copula neural linear model of Klein, Nott, Smith (2021) """).set_color(BLACK).scale(.7).align_to(title, LEFT).move_to(2*DOWN)
         solution.bg = SurroundingRectangle(solution, color=GREEN_D, fill_color=GREEN_A, fill_opacity=.2)
-        citation = Tex(r"\fontfamily{lmss}\selectfont Klein, N., Nott, D. J. and Smith, M. S. (2021). Marginally calibrated deep distributional regression. \textit{Journal of Computational and Graphical Statistics}").scale(0.4).move_to(2.75*DOWN + 2.75*LEFT).set_color(BLACK)
+        citation = Tex(r"\fontfamily{lmss}\selectfont Klein, N., Nott, D. J. and Smith, M. S. (2021). Marginally calibrated deep distributional regression. \textit{Journal of Computational and Graphical Statistics}").scale(0.4).move_to(2.9*DOWN + 2.75*LEFT).set_color(BLACK)
         
         solutions = VGroup(solution, solution.bg)
 
@@ -335,31 +336,45 @@ class Notation(SlideScene):
     def construct(self):
         set_background(self, "Variables and Notation", True)
 
-        title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Notation} """).move_to(2.75*UP).set_color(BLACK).scale(0.9)
+        title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Predictive Densities in EtE Learning} """).move_to(2.75*UP).set_color(BLACK).scale(0.9)
 
-
-        input_im = ImageMobject('files/angle_20_small.png').scale(0.3).move_to(4*LEFT )
-        input_test = Tex(r'input image $\boldsymbol{x}_i$').scale(0.5).set_color(BLACK).move_to(input_im.get_bottom() + .25*DOWN)
+        input_im = ImageMobject('files/angle_20_small.png').scale(0.3).move_to(4*LEFT + 1*UP )
+        input_test = Tex(r'\fontfamily{lmss}\selectfont input image $\boldsymbol{x}_i$').scale(0.5).set_color(BLACK).move_to(input_im.get_bottom() + .25*DOWN)
         
-        st_wheel = ImageMobject('files/steering_wheel.jpeg').scale(0.1)
-        st_text = Tex(r'\fontfamily{lmss}\selectfont steering angle $y_i$').move_to(st_wheel.get_bottom() + .5*DOWN).scale(0.5).set_color(BLACK)
-
-        dens_im =  ImageMobject('files/angle_20.png').scale(0.9).move_to(3.5*RIGHT )
+        #st_wheel = ImageMobject('files/steering_wheel.jpeg').scale(0.1).move_to(1*UP)
+        #st_text = Tex(r'\fontfamily{lmss}\selectfont steering angle $y_i$').move_to(st_wheel.get_bottom() + .5*DOWN).scale(0.5).set_color(BLACK)
+        dnn = Tex(r"""\fontfamily{lmss}\selectfont DNN""").set_color(BLACK).move_to(UP)
+        dens_im =  ImageMobject('files/angle_20.png').scale(0.9).move_to(4*RIGHT + 1*UP)
         pred = Tex(r'\fontfamily{lmss}\selectfont predictive density $p(y_i | \boldsymbol{x}_i)$').move_to(dens_im.get_bottom() + .25*DOWN).scale(0.5).set_color(BLACK)
         
-        
+        arrow1 = Arrow(input_im.get_right()  , dnn.get_left() , 
+                            buff=0, stroke_width= 5, 
+                            max_tip_length_to_length_ratio = 0.05).set_color(BLACK).scale(0.2)
+        arrow2 = Arrow(dnn.get_right()  , dens_im.get_left() , 
+                            buff=0, stroke_width= 5, 
+                            max_tip_length_to_length_ratio = 0.05).set_color(BLACK).scale(0.2)
 
-        self.add(title, input_im, input_test, st_wheel, st_text, pred, dens_im)
+        bullets_0 = Tex(r"""\fontfamily{lmss}\selectfont Problems of current methods to estimate $p(y_i | \boldsymbol{x}_i)$""").move_to(1*DOWN + 3*LEFT ).set_color(BLACK).scale(0.5)
+        bullets = Tex(r"""\fontfamily{lmss}\selectfont
+        \begin{itemize} 
+        \item not scalable (Bayesian Neural Networks)
+        \item not calibrated (Mixture Density Networks)
+        \item have to evaluate many DNNs in parallel (MC-dropout, ensembles)
+         \end{itemize}""").scale(0.5).move_to(bullets_0.get_bottom()+ 1*DOWN).set_color(BLACK).align_to(bullets_0, LEFT)
+
+        solution = Tex(r""" Marginally calibrated deep distributional Klein, Nott, Smith (2021) $=$ Implicit-copula neural linear model""").move_to(bullets.get_bottom() + .25*DOWN).align_to(bullets_0, LEFT)
+
+        self.add(title, input_im, input_test,  pred, dens_im, bullets, bullets_0, arrow1, arrow2, dnn) #st_wheel, st_text,
         self.wait(0.5)
 
 class NLM(SlideScene):
   def construct(self):
     set_background(self, "Implicit-Copula Neural Linear Model", True)
 
-    title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Implicit-Copula Neural Linear Models} """).move_to(2.75*UP).set_color(BLACK).scale(0.9)
+    title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Implicit-Copula Neural Linear Model} """).move_to(2.75*UP).set_color(BLACK).scale(0.9)
 
 
-    input = ImageMobject('files/80_436run1.png').scale(0.05).move_to(5*LEFT + .5*DOWN)
+    input = ImageMobject('files/80_436run1.png').scale(0.05).move_to(3*LEFT + .5*DOWN)
     input_test = Tex(r'input image $\boldsymbol{x}_i$').move_to(input.get_bottom()).scale(0.5).set_color(BLACK)
 
     myNetwork = NeuralNetworkMobject([8, 5, 1]).set_color(LIGHT_GRAY).scale(0.75).move_to(.5*DOWN)
@@ -409,7 +424,7 @@ class NLM(SlideScene):
     cnn_all = VGroup (cnn2, cnn1, cnn, cnn_text)
 
     # Arrows
-    arrow_input_cnn = Arrow(input.get_right()  , cnn.get_left() , 
+    arrow_input_cnn = Arrow(input.get_right()  , myNetwork.get_left() , 
                             buff=0, stroke_width= 2, 
                             max_tip_length_to_length_ratio = 0.05).set_color(BLACK).scale(0.2)
     arrow_cnn_dnn = Arrow(cnn.get_right() + 0.25*RIGHT, myNetwork.get_left() + 0.5*RIGHT, buff=0, 
@@ -419,15 +434,16 @@ class NLM(SlideScene):
     
 
     #myNetwork.label_outputs_text([r'predicted steering angle'])
-
+    citation = Tex(r"\fontfamily{lmss}\selectfont Klein, N., Nott, D. J. and Smith, M. S. (2021). Marginally calibrated deep distributional regression. \textit{Journal of Computational and Graphical Statistics}").scale(0.4).move_to(2.75*DOWN + 2.75*LEFT).set_color(BLACK)
+        
 
     self.add(title)
-    self.add(input, input_test)
+    self.add(input, input_test, citation)
     self.play(Create(arrow_input_cnn))
     self.slide_break()
-    self.play(Create(cnn_all))
-    self.slide_break()
-    self.play(Create(arrow_cnn_dnn))
+    #self.play(Create(cnn_all))
+    #self.slide_break()
+    #self.play(Create(arrow_cnn_dnn))
     self.slide_break()
     self.play(Write(myNetwork))
     self.slide_break()
@@ -503,27 +519,34 @@ class CopulaSlide(SlideScene):
     n = 2
     sklar_eq = Tex(r"$p(\boldsymbol{z} | \boldsymbol{x}, \boldsymbol{\theta})$",
                    r"$ = $",
-                   r"$c_{DNN}(F_{z_1}(z_1 | \boldsymbol{x}_1, \boldsymbol{\theta}), \ldots,  F_{z_n}(z_n | \boldsymbol{x}_n, \boldsymbol{\theta})$",
+                   r"$c_{DNN}$",
+                   r"$($"
+                   r"$F_{z_1}(z_1 | \boldsymbol{x}_1, \boldsymbol{\theta}), \ldots,  F_{z_n}(z_n | \boldsymbol{x}_n, \boldsymbol{\theta})$",
                    r"$| \boldsymbol{x}, \boldsymbol{\theta})$",
                    r"$\prod_{i=1}^n$",
                    r"$p_{z_i}(z_i| \boldsymbol{x}_i, \boldsymbol{\theta})$"
-                      ).move_to(sklars.get_bottom() + n*DOWN).set_color(BLACK).scale(0.8)
+                      ).move_to(sklars.get_bottom() + n*DOWN).set_color(BLACK).scale(0.6)
     
     sklar_eq_col = sklar_eq.copy()
     sklar_eq_col.set_color_by_tex_to_color_map({
         r"$p(\boldsymbol{z} | \boldsymbol{x}, \boldsymbol{\theta})$": RED_E,
-        r"$p_{z_i}(z_i| \boldsymbol{x}_i, \boldsymbol{\theta})$": RED_E
+        r"$p_{z_i}(z_i| \boldsymbol{x}_i, \boldsymbol{\theta})$": RED_E,
+        r"$F_{z_1}(z_1 | \boldsymbol{x}_1, \boldsymbol{\theta}), \ldots,  F_{z_n}(z_n | \boldsymbol{x}_n, \boldsymbol{\theta})$" :  RED_E,
+        r"$c_{DNN}$" : BLUE
              }) 
 
     sklar_eq2 = Tex(r"$\phi_n(\boldsymbol{z}; \boldsymbol{0}, R(\boldsymbol{x}, \boldsymbol{\theta}))$",
                    r"$ = $",
-                   r"$c_{DNN}(F_{z_1}(z_1 | \boldsymbol{x}_1, \boldsymbol{\theta}), \ldots,  F_{z_n}(z_n | \boldsymbol{x}_n, \boldsymbol{\theta})$",
+                   r"$c_{DNN}$",
+                   r"$($",
+                   r"$F_{z_1}(z_1 | \boldsymbol{x}_1, \boldsymbol{\theta}), \ldots,  F_{z_n}(z_n | \boldsymbol{x}_n, \boldsymbol{\theta})$",
                    r"$| \boldsymbol{x}, \boldsymbol{\theta})$",
                    r"$\prod_{i=1}^n $",
                    r"$\phi_{1}(z_i| \boldsymbol{x}_i, \boldsymbol{\theta})$"
-                      ).move_to(sklars.get_bottom() + n*DOWN).set_color(BLACK).scale(0.8)
+                      ).move_to(sklars.get_bottom() + n*DOWN).set_color(BLACK).scale(0.6)
     sklar_eq2.set_color_by_tex_to_color_map({
         r"$\phi_n(\boldsymbol{z}; \boldsymbol{0}, R(\boldsymbol{x}, \boldsymbol{\theta}))$": RED_E,
+        r"$F_{z_1}(z_1 | \boldsymbol{x}_1, \boldsymbol{\theta}), \ldots,  F_{z_n}(z_n | \boldsymbol{x}_n, \boldsymbol{\theta})$" :  RED_E,
         r"$\phi_{1}(z_i| \boldsymbol{x}_i, \boldsymbol{\theta})$": RED_E
              })   
     
@@ -531,16 +554,20 @@ class CopulaSlide(SlideScene):
     copula_dens = Tex(r"$c_{DNN}(F_{z_1}(z_1 | \boldsymbol{x}_1, \boldsymbol{\theta}), \ldots,  F_{z_n}(z_n | \boldsymbol{x}_n, \boldsymbol{\theta})| \boldsymbol{x}, \boldsymbol{\theta})$",
                    r"$ = $",
                    r"$\frac{\phi_n(\boldsymbol{z}; \boldsymbol{0}, R(\boldsymbol{x}, \boldsymbol{\theta})}{\prod_{i=1}^n \phi_{1}(z_i| \boldsymbol{x}_i, \boldsymbol{\theta})}$"
-                      ).move_to(sklars.get_bottom() + n*DOWN).set_color(BLACK).scale(0.8)    
+                      ).move_to(sklars.get_bottom() + n*DOWN).set_color(BLACK).scale(0.6)    
+    copula_dens.set_color_by_tex_to_color_map({
+        r"$\frac{\phi_n(\boldsymbol{z}; \boldsymbol{0}, R(\boldsymbol{x}, \boldsymbol{\theta})}{\prod_{i=1}^n \phi_{1}(z_i| \boldsymbol{x}_i, \boldsymbol{\theta})}$" : RED_E
+        })   
+
     
     # Now we use the same copula to model y with the shrinkage parameters integrated out
     # note that even though the copula from before is a Gaussian copula
     # the copula with the shrinkage parameters integrated out can be far from Gaussian
-    copula_dens_y = Tex(r"$p(\boldsymbol{y}| \boldsymbol{x}, \boldsymbol{\theta}) = c_{DNN}^* ($",
+    copula_dens_y = Tex(r"$p(\boldsymbol{y}| \boldsymbol{x}, \boldsymbol{\theta}) = c_{DNN} ($",
                         r"$F_Y(y_1), \ldots, F_Y(y_n)$",
                          r"$| \boldsymbol{x}, \boldsymbol{\theta}) \prod_{i=1}$",
                          r"$F_Y(y_i)$"
-                   ).move_to(copula_dens.get_bottom() + n/2*DOWN).set_color(BLACK).scale(0.8)
+                   ).move_to(copula_dens.get_bottom() + n/2*DOWN).set_color(BLACK).scale(0.6)
     
     copula_dens_y.set_color_by_tex_to_color_map({
         r"$F_Y(y_1), \ldots, F_Y(y_n)$": RED_E,
@@ -694,26 +721,26 @@ class VISlide(SlideScene):
     var_density = Tex(r"""$q_{\boldsymbol{\lambda}}(\boldsymbol{\beta}, \boldsymbol{\theta})$""").set_color(RED_E)
     member = VGroup(Text("approximation family:", font="Noto Sans").set_color(BLACK).scale(0.5),
                     Tex(r"""$q_{\boldsymbol{\lambda}}(\boldsymbol{\beta}, \boldsymbol{\theta}) = 
-    N(\boldsymbol{\mu}, \boldsymbol{\Upsilon} \boldsymbol{\Upsilon}^T + \Delta^2)$""").set_color(BLACK)).arrange(DOWN).move_to(2*RIGHT +2.5*UP ).scale(0.8)
+    N(\boldsymbol{\mu}, \boldsymbol{\Upsilon} \boldsymbol{\Upsilon}^T + \Delta^2)$""").set_color(BLACK)).arrange(DOWN).move_to(2*RIGHT +1.5*UP ).scale(0.6)
 
 
     KLD = VGroup(Text("Kullback-Leibler divergence:", font="Noto Sans").set_color(BLACK).scale(0.5),
                  Tex(r"""$\mathrm{KLD} (q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta}) || p(\boldsymbol{\vartheta}| \boldsymbol{y})) = 
     \int \frac{q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})}{p(\boldsymbol{\vartheta} | \boldsymbol{y})}
-    q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})d(\boldsymbol{\vartheta})$""").set_color(BLACK)).arrange(DOWN).move_to(1*UP + 2*RIGHT ).scale(0.8)
+    q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})d(\boldsymbol{\vartheta})$""").set_color(BLACK)).arrange(DOWN).move_to(.5*UP + 2*RIGHT ).scale(0.6)
 
     vlb = VGroup(Text("variational lower bound:", font="Noto Sans").set_color(BLACK).scale(0.5),
                  Tex(r"""$\mathcal{L}(\boldsymbol{\lambda}) = 
     \mathbb{E}_{q_{\boldsymbol{\lambda}}} [\log(p(\boldsymbol{y}|\boldsymbol{\vartheta})p(\boldsymbol{\vartheta})) - 
-    \log q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})] $""").set_color(BLACK)).arrange(DOWN).move_to(1*UP + 2*RIGHT ).scale(0.8)
+    \log q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})] $""").set_color(BLACK)).arrange(DOWN).move_to(.5*UP + 2*RIGHT ).scale(0.6)
     
     delta_vlb = VGroup(Text("optimize via gradient:", font="Noto Sans").set_color(BLACK).scale(0.5),
-                       Tex(r"$\nabla_{\boldsymbol{\lambda}}\mathcal{L}(\boldsymbol{\lambda})$").set_color(BLACK)).arrange(DOWN).move_to(2*RIGHT + 1*DOWN).scale(0.8)
+                       Tex(r"$\nabla_{\boldsymbol{\lambda}}\mathcal{L}(\boldsymbol{\lambda})$").set_color(BLACK)).arrange(DOWN).move_to(2*RIGHT + 1*DOWN).scale(0.6)
     
     delta_vlb_update =  VGroup(Text("update rule:", font="Noto Sans").set_color(BLACK).scale(0.5),
                                Tex(r"""$ \boldsymbol{\lambda}^{(t+1)} = 
     \boldsymbol{\lambda}^{(t)} + \boldsymbol{\rho}^{(t)} 
-    \nabla_{\boldsymbol{\lambda}}\mathcal{L}(\boldsymbol{\lambda}^{(t)})$""").set_color(BLACK)).arrange(DOWN).move_to(2*RIGHT +2.5*DOWN).scale(0.8)
+    \nabla_{\boldsymbol{\lambda}}\mathcal{L}(\boldsymbol{\lambda}^{(t)})$""").set_color(BLACK)).arrange(DOWN).move_to(2*RIGHT +2*DOWN).scale(0.6)
 
 
     axes = Axes((0, 3), (0, 5)).scale(0.4).move_to(.5*LEFT)
@@ -805,7 +832,7 @@ class VISlide(SlideScene):
     always(target_label.next_to, target_graph, UP)
     #v_approx_label = axes.get_graph_label(v_approx, r"q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})").move_to(2*RIGHT + UP).scale(0.5)
 
-    citation = Tex(r"Ong, V. M. H., Nott, D. J. and Smith, M. S. (2018). Gaussian variational approximation with a factor co-variance structure. \textit{Journal of Computational and Graphical Statistics}").set_color(BLACK).scale(0.3).move_to(2.75*DOWN + 3.5*LEFT)
+    citation = Tex(r"Ong, V. M. H., Nott, D. J. and Smith, M. S. (2018). Gaussian variational approximation with a factor co-variance structure. \textit{Journal of Computational and Graphical Statistics}").set_color(BLACK).scale(0.3).move_to(2.75*DOWN + 3.5*LEFT).align_to(LEFT)
     final_graph = VGroup(axes, target_graph,  v_approx2) #target_label, v_approx_label,
     self.add(axes, title) 
     self.play(
@@ -822,7 +849,7 @@ class VISlide(SlideScene):
     self.play(p.animate.set_value(4), run_time=3)
     self.slide_break()
     self.remove(axes, target_graph, v_approx, label)
-    self.play(final_graph.animate.move_to(3.5*LEFT), title.animate.move_to(4*LEFT + 2.5*UP))
+    self.play(final_graph.animate.move_to(3.5*LEFT))#, title.animate.move_to(4*LEFT + 2.5*UP)
     self.add(citation)
     self.slide_break()
     self.add(member)
@@ -848,11 +875,11 @@ class Data(SlideScene):
         data1 = Tex(r"""\fontfamily{lmss}\selectfont \begin{itemize} \item 33 hours of video data on US highways with steering angles \end{itemize}""").set_color(BLACK).scale(0.5).move_to(1.75*LEFT + 1.5*UP)
         data2 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \item extracted $n = 450,000$ frames \end{itemize}").set_color(BLACK).scale(0.5).move_to(1*UP).align_to(data1, LEFT)
         data3 = Tex(r"\fontfamily{lmss}\selectfont \begin{itemize} \item clean and raw version \end{itemize} ").set_color(BLACK).scale(0.5).move_to(.5*UP).align_to(data1, LEFT)
-        pilot = ImageMobject('files/PilotNet.png').scale(1).move_to(1.75*DOWN)
+        pilot = ImageMobject('files/PilotNet.png').scale(.8).move_to(1.75*DOWN)
         pilot_text = Tex(r"\fontfamily{lmss}\selectfont \textbf{PilotNet Model Architecture} (Bojarski et. al, 2016)").move_to(pilot.get_top() + .2*UP + 2.5*LEFT).set_color(BLACK).scale(0.6).align_to(data0, LEFT)
 
         citations = VGroup(Tex(r"Bojarski,  M. et. al. (2016). End to end learning for self-driving cars."),
-        Tex(r"Schafer, H., Santana, E., Haden, A. and Biasini, R. (2018). A commute in data: the comma2k19 dataset.")).arrange(DOWN).move_to(3.2*DOWN + 0*RIGHT).scale(0.3).set_color(BLACK)
+        Tex(r"Schafer, H., Santana, E., Haden, A. and Biasini, R. (2018). A commute in data: the comma2k19 dataset.")).arrange(DOWN).move_to(3*DOWN + 0*RIGHT).scale(0.3).set_color(BLACK).align_to(LEFT)
         self.add(ex, title, data0, data1, data2, data3)
         self.add(pilot, pilot_text)
         self.add(citations)
@@ -865,14 +892,14 @@ class FullAlgorithm(SlideScene):
         bullets = Tex(r"""\fontfamily{lmss}\selectfont
         \begin{enumerate}
         \item Estimate margin $F_Y$ from all steering angles in data $\boldsymbol{y}= (y_1,...,y_n)^T$
-        \item Train PilotNet DNN to predict the transformed response $z_i = \Phi^{-1}(F_Y(y_i))$ from images of the ahead-lying street $\boldsymbol{x}_i$, $i = 1,...,n$
+        \item Train PilotNet DNN to predict the transformed steering angles $z_i = \Phi^{-1}(F_Y(y_i))$ from images of the ahead-lying street $\boldsymbol{x}_i$, $i = 1,...,n$
         \item Obtain posterior of model parameters $p(\boldsymbol{\beta}, \boldsymbol{\theta}|  \boldsymbol{x}, \boldsymbol{y})$ via MCMC and VI using deep basis functions from previous step
         \item Compute predictive densities for new covariates $\boldsymbol{x}_0$ at value $y_0$ via $p(y_0 | \boldsymbol{x}_0, \boldsymbol{x}, \boldsymbol{y}) = \int p(y_0 | \boldsymbol{x}_0, \boldsymbol{\beta}, \boldsymbol{\theta}, \boldsymbol{x}, \boldsymbol{y})p(\boldsymbol{\beta}, \boldsymbol{\theta}| \boldsymbol{x}, \boldsymbol{y})d(\boldsymbol{\beta}, \boldsymbol{\theta})$
         \end{enumerate}""").set_color(BLACK).scale(0.5)
         
         bullets2 = Tex(r"""\fontfamily{lmss}\selectfont \begin{itemize}
          \item[$\rightarrow$] now check accuracy of VI/MCMC \& quality of predictive densities
-         \end{itemize} """).set_color(BLACK).scale(0.7).move_to(bullets.get_bottom() + .5*DOWN)
+         \end{itemize} """).set_color(BLUE_D).scale(0.7).move_to(bullets.get_bottom() + 1*DOWN)
         self.add(title, bullets, bullets2)
         self.wait(0.5)
 
@@ -890,10 +917,10 @@ class PostMeanSD(SlideScene):
 
         hs_plots = Group(hs_means,hs_sd).arrange() #.move_to(np.array([5, -3.5, 0]))
         
-        title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Accuracy VI vs. HMC}").move_to( 2.75*UP).set_color(BLACK).scale(0.7)
+        title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Accuracy VI vs. HMC (Horseshoe Prior)}").move_to( 2.75*UP).set_color(BLACK).scale(0.7)
         
-        conclusion = Text("The means are estimated accurately but some misestimation for the s.d.", font="Noto Sans").set_color(BLACK).move_to(hs_plots.get_bottom() + .75*DOWN).scale(0.5)
-        conclusion.bg = SurroundingRectangle(conclusion, color=RED, fill_color=RED_A, fill_opacity=.2)
+        conclusion = Text("Overall VI is sufficiently accurate to substitute MCMC", font="Noto Sans").set_color(BLACK).move_to(hs_plots.get_bottom() + .75*DOWN).scale(0.5)
+        conclusion.bg = SurroundingRectangle(conclusion, color=GREEN, fill_color=GREEN_A, fill_opacity=.2)
 
         self.add(title, hs_plots)
         self.slide_break()
@@ -908,21 +935,38 @@ class Calibration(SlideScene):
         marg_cal.width = 6
         marg_cal.height = 4
 
-        prob_cal = ImageMobject('files/calibration/prob_calibration.png')
-        prob_cal.width = 6
-        prob_cal.height = 4
+        cov_rates = ImageMobject('files/prediction_intervals/coverage_rates.png')
+        cov_rates.width = 6
+        cov_rates.height = 4
 
-        cal_plots = Group(marg_cal,prob_cal).arrange() 
+        cal_plots = Group(marg_cal,cov_rates).arrange() 
         
-        title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Marginal \& Probability Calibration}""").move_to(2.75*UP).set_color(BLACK).scale(0.7)
+        title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Reliability of the Predictive Densities}""").move_to(2.75*UP).set_color(BLACK).scale(0.7)
         
-        conclusion = Text("The IC-NLM is better calibrated than MC-Dropout and the Mixture Density Network", font="Noto Sans").set_color(BLACK).move_to(cal_plots.get_bottom() + .75*DOWN).scale(0.5)
-        conclusion.bg = SurroundingRectangle(conclusion, color=RED, fill_color=RED_A, fill_opacity=.2)
+        conclusion = Text("The IC-NLM is well-calibrated and provides accurate coverage rates", font="Noto Sans").set_color(BLACK).move_to(cal_plots.get_bottom() + .75*DOWN).scale(0.5)
+        conclusion.bg = SurroundingRectangle(conclusion, color=GREEN, fill_color=GREEN_A, fill_opacity=.2)
 
         self.add(title, cal_plots)
         self.slide_break()
         self.play(Create(conclusion), Create(conclusion.bg))
         self.wait(0.5)
+
+class BenchmarkStudy(SlideScene):
+    def construct(self):
+        set_background(self, "Neural Linear Model", True)
+
+        title = Tex(r"""\fontfamily{lmss}\selectfont Benchmark Study""").set_color(BLACK).move_to(2.75*UP).set_color(BLACK).scale(0.7)
+
+        bullets = Tex(r"""\fontfamily{lmss}\selectfont \begin{enumerate}
+        \item IC-NLM $+$ ridge prior
+        \item IC-NLM $+$ horseshoe prior
+        \item MC-dropout
+        \item Mixture density network
+        \end{enumerate} """).set_color(BLACK).scale(0.7)
+
+        self.add(title, bullets)
+        self.wait(0.5)
+    
 
 class PredictionIntervals(SlideScene):
     def construct(self):
@@ -952,22 +996,23 @@ class OutlookDiscussion(SlideScene):
     def construct(self):
         set_background(self, " Discussion & Outlook", True)
 
-        title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Discussion \& Outlook}").move_to(2.75*UP).set_color(BLACK).scale(0.7)
-        bullet_points0 = Tex(r"""Implicit copula NLM for EtE learning...
+        title = Tex(r"\fontfamily{lmss}\selectfont \textbf{Discussion \& Outlook}").move_to(2.75*UP ).set_color(BLACK).scale(0.7)
+        bullet_points00 = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Implicit copula NLM for EtE learning}""").scale(.7).move_to(1.5*UP +1.5*LEFT).set_color(BLACK)
+        bullet_points0 = Tex(r"""\fontfamily{lmss}\selectfont
          \begin{itemize}
          \item can be made scalable via variational inference
          \item is marginally calibrated and competitively prob. calibrated
          \item provides informative and reliable prediction intervals
          \end{itemize}
-         """).move_to(2*UP)
-
-        bullet_points = Tex(r"""\fontfamily{lmss}\selectfont \begin{itemize} Outlook:
-        \item Regularized horseshoe prior
-        \item Combine densities with route planning
-        \item Identify several steering actions
-        \item Integrate VI into loss function
+         """).move_to(.5*UP + 1.5*LEFT).set_color(BLACK).scale(0.5)
+        
+        bullet_points000 = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Outlook}""").move_to(1*DOWN).set_color(BLACK).scale(.7).align_to(bullet_points0, LEFT)
+        bullet_points = Tex(r"""\fontfamily{lmss}\selectfont
+         \begin{itemize} 
+        \item Identify several steering actions to combine densities with route planning
+        \item Integrate estimation into loss function
         \item Loss of information of neural linear models vs. full model uncertainty
         \end{itemize}
-        """).set_color(BLACK).scale(0.5).move_to(bullet_points0.get_bottom())
-        self.add(title, bullet_points, bullet_points0)
+        """).set_color(BLACK).scale(0.5).move_to(2*DOWN + 1.5*LEFT).align_to(bullet_points0, LEFT)
+        self.add(title, bullet_points, bullet_points0, bullet_points00, bullet_points000)
         self.wait(0.5)
