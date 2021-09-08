@@ -46,10 +46,10 @@ class NeuralNetworkMobject(VGroup):
             output_neuron_color=WHITE,
             input_neuron_color=WHITE,
             hidden_layer_neuron_color=WHITE,
-            neuron_stroke_width=2,
+            neuron_stroke_width=1,
             neuron_fill_color=GREEN,
             edge_color=LIGHT_GREY,
-            edge_stroke_width=2,
+            edge_stroke_width=1,
             edge_propogation_color=YELLOW,
             edge_propogation_time=1,
             max_shown_neurons=16,
@@ -120,9 +120,9 @@ class NeuralNetworkMobject(VGroup):
         neurons = VGroup(*[
             Circle(
                 radius=self.neuron_radius,
-                stroke_color=self.get_nn_fill_color(index),
+                stroke_color= BLACK, # self.get_nn_fill_color(index),
                 stroke_width=self.neuron_stroke_width,
-                fill_color=BLACK,
+                fill_color=LIGHT_GRAY,
                 fill_opacity=self.neuron_fill_opacity,
             )
             for x in range(n_neurons)
