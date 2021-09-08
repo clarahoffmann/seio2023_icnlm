@@ -16,5 +16,3 @@ file 'file:/Users/clarahoffmann/manim_slides/video_slides/partial_movie_files/NL
 file 'file:/Users/clarahoffmann/manim_slides/video_slides/partial_movie_files/NLM/uncached_00014.mp4'
 file 'file:/Users/clarahoffmann/manim_slides/video_slides/partial_movie_files/NLM/uncached_00015.mp4'
 file 'file:/Users/clarahoffmann/manim_slides/video_slides/partial_movie_files/NLM/uncached_00016.mp4'
-file 'file:/Users/clarahoffmann/manim_slides/video_slides/partial_movie_files/NLM/uncached_00017.mp4'
-file 'file:/Users/clarahoffmann/manim_slides/video_slides/partial_movie_files/NLM/uncached_00018.mp4'

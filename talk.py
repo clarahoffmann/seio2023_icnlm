@@ -405,7 +405,7 @@ class NLM(SlideScene):
         r"$\boldsymbol{\beta}$": GREEN_D
              }) 
     output_text4 = Tex(r'$\boldsymbol{\beta} | \boldsymbol{\theta}, \sigma^2 \sim N(0, \sigma^2P(\boldsymbol{\theta})^{-1})$').move_to(output_text3a.get_bottom()+ 0.3*DOWN).scale(0.6).set_color(GREEN_E).align_to(output_text3a, LEFT)
-    output_text5 = Tex(r"$z_i = \Phi^{-1}F_Y(y_i)$").move_to(output_text4.get_bottom()+ 0.3*DOWN).scale(0.6).set_color(PURPLE_D).align_to(output_text4, LEFT)
+    output_text5 = Tex(r"$z_i = \Phi^{-1}(F_Y(y_i))$").move_to(output_text4.get_bottom()+ 0.3*DOWN).scale(0.6).set_color(PURPLE_D).align_to(output_text4, LEFT)
     Bzeta = Rectangle(
         width = .6,
         height = 2.75,
@@ -589,7 +589,7 @@ class CopulaSlide(SlideScene):
     n = 2
     final_expr = Tex(r"$p(\boldsymbol{y} | \boldsymbol{x}) = \int p(\boldsymbol{y}| \boldsymbol{x}, \boldsymbol{\beta}, \boldsymbol{\theta}) $",
                      r"$p(\boldsymbol{\beta}, \boldsymbol{\theta}| \boldsymbol{x}, \boldsymbol{y})$",
-                     r"$d(\boldsymbol{\beta}, \boldsymbol{y})$").set_color(BLACK).scale(0.8)
+                     r"$d(\boldsymbol{\beta}, \boldsymbol{\theta})$").set_color(BLACK).scale(0.8)
     
     final_expr.set_color_by_tex_to_color_map({
         r"$p(\boldsymbol{\beta}, \boldsymbol{\theta}| \boldsymbol{x}, \boldsymbol{y})$": RED_E
