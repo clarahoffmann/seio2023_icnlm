@@ -697,11 +697,11 @@ class VIvsHMC(SlideScene):
         
         acc_type = Tex(r"\fontfamily{lmss}\selectfont accuracy").move_to(-.5*UP).scale(0.5).set_color(BLACK)
         acc_mcmc = Tex(r"""\fontfamily{lmss}\selectfont exact sampling \checkmark """).set_color(GREEN_D).move_to(3.5*LEFT + -.5*UP).scale(0.6)
-        acc_vi = Tex(r"""\fontfamily{lmss}\selectfont approximative \xmark""").set_color(RED_D).move_to(3.5*RIGHT + -.5*UP).scale(0.6)
+        acc_vi = Tex(r"""\fontfamily{lmss}\selectfont approximate \xmark""").set_color(RED_D).move_to(3.5*RIGHT + -.5*UP).scale(0.6)
 
         estimation_type = Tex(r"\fontfamily{lmss}\selectfont estimation type").move_to(-1.5*UP).scale(0.5).set_color(BLACK)
-        prop_mcmc = Tex(r"""\fontfamily{lmss}\selectfont numerical sample""").set_color(BLACK).move_to(3.5*LEFT + -1.5*UP).scale(0.6).set_color(GREEN_D)
-        prop_vi = Tex(r"""\fontfamily{lmss}\selectfont closed-form solution """).set_color(BLACK).move_to(3.5*RIGHT + -1.5*UP).scale(0.6).set_color(GREEN_D)
+        prop_mcmc = Tex(r"""\fontfamily{lmss}\selectfont numerical sample from posterior""").set_color(BLACK).move_to(3.5*LEFT + -1.5*UP).scale(0.6).set_color(GREEN_D)
+        prop_vi = Tex(r"""\fontfamily{lmss}\selectfont optimization problem """).set_color(BLACK).move_to(3.5*RIGHT + -1.5*UP).scale(0.6).set_color(GREEN_D)
 
         self.add(title)
         self.add(mcmc)
@@ -1009,7 +1009,7 @@ class OutlookDiscussion(SlideScene):
         bullet_points0 = Tex(r"""\fontfamily{lmss}\selectfont
          \begin{itemize}
          \item can be made scalable via variational inference
-         \item is marginally calibrated and competitively prob. calibrated
+         \item produces marginally calibrated densities
          \item provides informative and reliable prediction intervals
          \end{itemize}
          """).move_to(.5*UP + 1.5*LEFT).set_color(BLACK).scale(0.5)
