@@ -51,10 +51,10 @@ class Title(SlideScene):
         title2 = Tex(r"\fontfamily{lmss}\selectfont \textbf{for End-to-End Learners in Autonomous Driving}").move_to(.4*UP).scale(1).set_color(BLUE_E)
 
         authors = Tex(r"\fontfamily{lmss}\selectfont Clara Hoffmann and Nadja Klein").scale(0.8).set_color(BLACK).move_to(DOWN)
-        group = Tex(r"\fontfamily{lmss}\selectfont Emmy Noether Research Group in Statistics \& Data Science, Humboldt-Universität zu Berlin").scale(0.5).set_color(BLACK).move_to(1.5*DOWN)
+        group = Tex(r"\fontfamily{lmss}\selectfont KleinLab - Uncertainty Quantification and Statistical Learning, Technical University Dortmund").scale(0.5).set_color(BLACK).move_to(1.5*DOWN)
 
-        date = Tex(r"\fontfamily{lmss}\selectfont September 16th, 2021").set_color(BLACK).scale(0.6).move_to(2.5*DOWN)
-        conference = Tex(r"\fontfamily{lmss}\selectfont Statistische Woche 2021").set_color(BLACK).scale(0.6).move_to(2.75*DOWN)
+        date = Tex(r"\fontfamily{lmss}\selectfont November 7th, 2023").set_color(BLACK).scale(0.6).move_to(2.5*DOWN)
+        conference = Tex(r"\fontfamily{lmss}\selectfont XIV Conference on Public Statistics 2023").set_color(BLACK).scale(0.6).move_to(2.75*DOWN)
         self.add(title1, title2,  authors, group, date, conference) # title3,
         self.wait(0.5)
 
@@ -366,7 +366,7 @@ class Notation(SlideScene):
         \item[\xmark] not \textbf{scalable} (e.g. Bayesian Neural Networks)
         \item[\xmark] not \textbf{calibrated} (e.g. Mixture Density Networks)
         \item[\xmark] have to evaluate many DNNs in \textbf{parallel} (e.g. MC-dropout, ensembles)
-         \end{itemize} \end{itemize}""").scale(0.5).move_to(bullets_0.get_bottom()+ .75*DOWN).set_color(BLACK).align_to(bullets_0, LEFT)
+        \end{itemize} \end{itemize}""").scale(0.5).move_to(bullets_0.get_bottom()+ .75*DOWN).set_color(BLACK).align_to(bullets_0, LEFT)
         bullets.move_to(bullets.get_center() + .25*RIGHT)
 
         solution = Tex(r""" Marginally calibrated deep distributional Klein, Nott, Smith (2021) $=$ Implicit-copula neural linear model""").move_to(bullets.get_bottom() + .25*DOWN).align_to(bullets_0, LEFT)
@@ -667,6 +667,111 @@ class CopulaSlide(SlideScene):
     self.add(final_exp_text)
     self.slide_break(0.5) 
 
+
+class VI_solo(Scene):
+    def construct(self):
+        set_background(self, "", False)
+        axes = Axes((0, 3), (0, 5)).scale(0.6).move_to(.5*LEFT)
+        title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Variational Inference}""").move_to(2.75*UP).set_color(BLACK).scale(0.7)
+        def func(x):
+            #mixture 1
+            rv1 = norm(loc = 1.5, scale = 0.2)
+            rv2 = norm(loc = 0.5, scale = 0.5)
+            rv3 = norm(loc = 0, scale = 0.4)
+            rv4 = norm(loc = 2.2, scale = 0.3)
+            
+            a1 = 1
+            a2 = 1
+            a3 = 1
+            a4 = 1
+
+            if x == 0:
+                return 0
+            
+            sum = a1 + a2 + a3 + a4
+            return((a1*rv1.pdf(x)/sum + a2*rv2.pdf(x)/sum + a3*rv3.pdf(x)/sum + a4*rv4.pdf(x)/sum )*3)
+        
+        def func2(x, degree):
+            #mixture 1
+            rv1 = norm(loc = 1.5, scale = 0.2)
+            rv2 = norm(loc = 0.5, scale = 0.5)
+            rv3 = norm(loc = 0, scale = 0.4)
+            rv4 = norm(loc = 2.2, scale = 0.3)
+            
+            a1 = 5-degree
+            a2 = 5-degree
+            a3 = 3-degree/2
+            a4 = 9-degree*2
+
+            if x == 0:
+                return 0
+            
+            sum = a1 + a2 + a3 + a4
+            return((a1*rv1.pdf(x)/sum + a2*rv2.pdf(x)/sum + a3*rv3.pdf(x)/sum + a4*rv4.pdf(x)/sum )*(degree/2 + 1))
+
+        target_graph = axes.get_graph(
+                lambda x: 2*func(x),
+                color=BLUE,
+            )
+        
+        p = ValueTracker(0)
+
+        v_approx = axes.get_graph(
+                lambda x: 2*func2(x,  1) ,
+                color = RED_E #,
+                #x_min = 0,
+                #x_max = 3
+            )
+        
+        v_approx2 = axes.get_graph(
+                lambda x: 2*func2(x,  1) ,
+                color = RED_E #,
+                #x_min = 0,
+                #x_max = 3
+            )
+
+        v_approx.add_updater(
+                lambda m: m.become(
+                    axes.get_graph(
+                        lambda x: 2*func2(x,  p.get_value()),
+                        color = RED_E 
+                    )
+                )
+            )
+
+        text, number = label = VGroup(
+                Tex(r"$\lambda = $").set_color(BLACK),
+                DecimalNumber(
+                    0,
+                    show_ellipsis=True,
+                    num_decimal_places=1,
+                    include_sign=False,
+                ).set_color(BLACK)
+            )
+        label.arrange(RIGHT)
+        f_always(number.set_value, p.get_value)
+        always(label.next_to, axes, DOWN)
+
+        #target_label = axes.get_graph_label(target_graph, Tex(r"p(\\boldsymbol{\\vartheta}| \\boldsymbol{x}, \\boldsymbol{y})")).move_to(0.1*LEFT + UP).scale(0.5)
+        target_label = Tex(r"""\fontfamily{lmss}\selectfont target density $p(\boldsymbol{\vartheta}| \boldsymbol{x}, \boldsymbol{y})$""").set_color(BLUE).scale(.7)
+        v_approx_label = Tex(r""" \fontfamily{lmss}\selectfont variational density $q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})$""").set_color(RED_E).scale(.7)
+        always(v_approx_label.next_to, target_graph, .5*RIGHT)
+        always(target_label.next_to, target_graph, UP)
+        #v_approx_label = axes.get_graph_label(v_approx, r"q_{\boldsymbol{\lambda}}(\boldsymbol{\vartheta})").move_to(2*RIGHT + UP).scale(0.5)
+        
+        final_graph = VGroup(axes, target_graph,  v_approx2) #target_label, v_approx_label,
+        self.add(axes, title) 
+        self.play(
+                Create(target_graph),
+                Create(target_label),
+            )
+        self.wait(1)
+        self.play(Create(v_approx),
+                Create(v_approx_label),
+                Create(label))
+        self.wait(1)
+        self.play(p.animate.set_value(4), run_time=3)
+        self.wait(1)
 
 
 
