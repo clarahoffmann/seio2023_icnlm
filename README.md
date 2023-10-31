@@ -1,6 +1,8 @@
-Presentation for Statistische Woche 2021 about End-to-End learning.
+#Presentation at SEIO 2023
 
-[Link to the presentation](https://clarahoffmann.github.io/ete-presentation/)
+Marginally calibrated response distributions for end-to-end learning in autonomous driving - Clara Hoffmann \& Nadja Klein
+
+[Link to the presentation](https://clarahoffmann.github.io/seio2023_icnlm/)
 
 How to compile the slides:
 
@@ -11,4 +13,4 @@ How to compile the slides:
 
 Enjoy the presentation :confetti_ball:
 
-Look here for help: \url{https://github.com/anjandn/manim_reveal}
+Look here for help: https://github.com/anjandn/manim_reveal
