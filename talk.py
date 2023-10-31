@@ -26,7 +26,7 @@ def set_background(self, section, lower_line):
     
       
     line2 = Line(start = np.array([-1.9, -3.5, 0]), 
-                 end = np.array([4, -3.5, 0]), stroke_width=0.5).set_color(GRAY)
+                 end = np.array([2.7, -3.5, 0]), stroke_width=0.5).set_color(GRAY)
 
     pres_title = Text("Uncertainty Quantification for EtE Learning", 
                       font="Noto Sans").scale(0.3).move_to(np.array([-4, -3.5, 0])).set_color(GRAY)
@@ -51,10 +51,10 @@ class Title(SlideScene):
         title2 = Tex(r"\fontfamily{lmss}\selectfont \textbf{for End-to-End Learners in Autonomous Driving}").move_to(.4*UP).scale(1).set_color(BLUE_E)
 
         authors = Tex(r"\fontfamily{lmss}\selectfont Clara Hoffmann and Nadja Klein").scale(0.8).set_color(BLACK).move_to(DOWN)
-        group = Tex(r"\fontfamily{lmss}\selectfont KleinLab - Uncertainty Quantification and Statistical Learning, Technical University Dortmund").scale(0.5).set_color(BLACK).move_to(1.5*DOWN)
+        group = Tex(r"\fontfamily{lmss}\selectfont Chair of Uncertainty Quantification and Statistical Learning (KleinLab) \\ TU Dortmund \& Research Center for Trustworthy Data Science and Security").scale(0.5).set_color(BLACK).move_to(1.5*DOWN)
 
         date = Tex(r"\fontfamily{lmss}\selectfont November 7th, 2023").set_color(BLACK).scale(0.6).move_to(2.5*DOWN)
-        conference = Tex(r"\fontfamily{lmss}\selectfont XIV Conference on Public Statistics 2023").set_color(BLACK).scale(0.6).move_to(2.75*DOWN)
+        conference = Tex(r"\fontfamily{lmss}\selectfont XIV Conference on Public Statistics").set_color(BLACK).scale(0.6).move_to(2.75*DOWN)
         self.add(title1, title2,  authors, group, date, conference) # title3,
         self.wait(0.5)
 
@@ -124,21 +124,21 @@ class UncertaintyEtE(SlideScene):
                     'num_decimal_places' : 0,
                     'include_sign' : False,
                     'color' : BLACK
-                }, 
+                },
               },
             tips = False
         ).set_color(BLACK).scale(0.8).move_to(DOWN)
 
     graph = ax.get_graph(
             lambda x: func(x,  p.get_value()) ,
-            color = BLUE 
+            color = BLUE
         )
 
     graph.add_updater(
             lambda m: m.become(
                 ax.get_graph(
                     lambda x: func(x,  p.get_value()),
-                    color = BLUE 
+                    color = BLUE
                 )
             )
 
@@ -154,7 +154,7 @@ class UncertaintyEtE(SlideScene):
     
     graph_end = ax.get_graph(
             lambda x: func2(x,  p.get_value()) ,
-            color = BLUE 
+            #color = BLUE
         )
 
     return(ax, graph, p, label_y, label_x, graph_end, label_graph)
@@ -335,6 +335,8 @@ class Motivation(SlideScene):
 class Notation(SlideScene):
     def construct(self):
         set_background(self, "Variables and Notation", True)
+        myTemplate = TexTemplate()
+        myTemplate.add_to_preamble(r"\usepackage{pifont}")
 
         title = Tex(r"""\fontfamily{lmss}\selectfont \textbf{Predictive Densities in EtE Learning} """).move_to(2.75*UP).set_color(BLACK).scale(0.7)
 
@@ -360,13 +362,7 @@ class Notation(SlideScene):
                             max_tip_length_to_length_ratio = 0.05).set_color(BLACK).scale(0.2)
 
         bullets_0 = Tex(r"""\fontfamily{lmss}\selectfont \begin{itemize} \item Problems of current methods to estimate $p(y_i | \boldsymbol{x}_i)$ \end{itemize}""").set_color(BLACK).scale(0.5).move_to(1*DOWN).align_to(text, LEFT)
-        bullets = Tex(r"""\fontfamily{lmss}\selectfont
-        \begin{itemize} 
-        \begin{itemize} 
-        \item[\xmark] not \textbf{scalable} (e.g. Bayesian Neural Networks)
-        \item[\xmark] not \textbf{calibrated} (e.g. Mixture Density Networks)
-        \item[\xmark] have to evaluate many DNNs in \textbf{parallel} (e.g. MC-dropout, ensembles)
-        \end{itemize} \end{itemize}""").scale(0.5).move_to(bullets_0.get_bottom()+ .75*DOWN).set_color(BLACK).align_to(bullets_0, LEFT)
+        bullets = Tex(r"""\fontfamily{lmss}\selectfont \begin{itemize} \item[\texttimes] not \textbf{scalable} (e.g. Bayesian Neural Networks) \item[\texttimes] not \textbf{calibrated} (e.g. Mixture Density Networks) \item[\texttimes] have to evaluate many DNNs in \textbf{parallel} (e.g. MC-dropout, ensembles) \end{itemize}""").scale(0.5).move_to(bullets_0.get_bottom()+ .75*DOWN).set_color(BLACK).align_to(bullets_0, LEFT)
         bullets.move_to(bullets.get_center() + .25*RIGHT)
 
         solution = Tex(r""" Marginally calibrated deep distributional Klein, Nott, Smith (2021) $=$ Implicit-copula neural linear model""").move_to(bullets.get_bottom() + .25*DOWN).align_to(bullets_0, LEFT)
@@ -797,12 +793,12 @@ class VIvsHMC(SlideScene):
         label.arrange(RIGHT).move_to(.5*UP).scale(0.5)
         f_always(number.set_value, p.get_value)
 
-        scal_mcmc = Tex(r"""\fontfamily{lmss}\selectfont sticky, slow \xmark""").set_color(RED_D).move_to(3.5*LEFT + .5*UP).scale(0.6)
+        scal_mcmc = Tex(r"""\fontfamily{lmss}\selectfont sticky, slow \texttimes""").set_color(RED_D).move_to(3.5*LEFT + .5*UP).scale(0.6)
         scal_vi = Tex(r"""\fontfamily{lmss}\selectfont scalable \checkmark""").set_color(GREEN_D).move_to(3.5*RIGHT + .5*UP).scale(0.6)
         
         acc_type = Tex(r"\fontfamily{lmss}\selectfont accuracy").move_to(-.5*UP).scale(0.5).set_color(BLACK)
         acc_mcmc = Tex(r"""\fontfamily{lmss}\selectfont exact sampling \checkmark """).set_color(GREEN_D).move_to(3.5*LEFT + -.5*UP).scale(0.6)
-        acc_vi = Tex(r"""\fontfamily{lmss}\selectfont approximate \xmark""").set_color(RED_D).move_to(3.5*RIGHT + -.5*UP).scale(0.6)
+        acc_vi = Tex(r"""\fontfamily{lmss}\selectfont approximate \texttimes""").set_color(RED_D).move_to(3.5*RIGHT + -.5*UP).scale(0.6)
 
         estimation_type = Tex(r"\fontfamily{lmss}\selectfont estimation type").move_to(-1.5*UP).scale(0.5).set_color(BLACK)
         prop_mcmc = Tex(r"""\fontfamily{lmss}\selectfont numerical sample from posterior""").set_color(BLACK).move_to(3.5*LEFT + -1.5*UP).scale(0.6).set_color(GREEN_D)
