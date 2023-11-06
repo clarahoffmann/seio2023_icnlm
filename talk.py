@@ -21,12 +21,12 @@ def set_background(self, section, lower_line):
     emmy.width = 1
     emmy.height = 0.5
 
-    logos = Group(emmy,hu_logo).arrange().move_to(np.array([5, -3.5, 0]))
+    logos = Group(emmy,hu_logo).arrange().move_to(np.array([4, -3.5, 0]))
     
     
       
     line2 = Line(start = np.array([-1.9, -3.5, 0]), 
-                 end = np.array([2.7, -3.5, 0]), stroke_width=0.5).set_color(GRAY)
+                 end = np.array([2., -3.5, 0]), stroke_width=0.5).set_color(GRAY)
 
     pres_title = Text("Uncertainty Quantification for EtE Learning", 
                       font="Noto Sans").scale(0.3).move_to(np.array([-4, -3.5, 0])).set_color(GRAY)
@@ -1124,4 +1124,15 @@ class OutlookDiscussion(SlideScene):
         \end{itemize}
         """).set_color(BLACK).scale(0.5).move_to(2*DOWN + 1.5*LEFT).align_to(bullet_points0, LEFT)
         self.add(title, bullet_points, bullet_points0, bullet_points00, bullet_points000)
+        self.wait(0.5)
+        
+
+class QRCodes(SlideScene):
+    def construct(self):
+        set_background(self, None, True)
+        qrcode_paper = ImageMobject('files/qrcode_github.png').scale(0.6).move_to(3*LEFT)
+        qrcode_github = ImageMobject('files/qrcode_paper.png').scale(0.6).move_to(3*RIGHT)
+        text1 = Tex(r"Paper in Annals of Applied Statistics").set_color(BLACK).scale(0.7).move_to(2.5*DOWN + 3*RIGHT)
+        text2 = Tex(r"GitHub: clarahoffmann").set_color(BLACK).scale(0.7).move_to(2.5*DOWN + 3*LEFT)
+        self.add(qrcode_paper, qrcode_github,  text1, text2)
         self.wait(0.5)

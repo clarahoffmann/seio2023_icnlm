@@ -1,2 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:/Users/clarahoffmann/manim_slides/video_slides/partial_movie_files/Data/uncached_00000.mp4'
